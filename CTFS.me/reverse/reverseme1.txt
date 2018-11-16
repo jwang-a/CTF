@@ -1,0 +1,2 @@
+###Trivial###
+generate pseducode with IDApro and all is clear
