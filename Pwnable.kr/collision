@@ -1,0 +1,3 @@
+###learn how to pass binary as commandline argument
+
+./col $(printf "\xec\x21\xdd\x21@:@@@:@@@:@@@9??")

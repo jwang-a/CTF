@@ -1,0 +1,5 @@
+### comparison operator comes before assign operator
+### fd becomes 0 by mistake > reads from stdin
+
+1111111111
+0000000000

@@ -1,0 +1,2 @@
+upx -d flag
+open with idapro and everything is obvious
