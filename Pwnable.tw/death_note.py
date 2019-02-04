@@ -52,6 +52,8 @@ r.interactive()
 
 ###Appendix
 ###Alphanumerical Shellcode Ref
+#  https://nets.ec/Shellcode/Appendix/Alphanumeric_opcode#32-bit_printable_opcodes
+###Printable Shellcode Ref
 '''
 1.数据传送:
 push/pop eax...
