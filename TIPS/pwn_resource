@@ -1,0 +1,15 @@
+pwntools
+	https://github.com/arthaud/python3-pwntools
+
+pwngdb
+	https://github.com/scwuaptx/Pwngdb
+
+peda
+	https://github.com/longld/peda
+
+main_arena
+	https://github.com/bash-c/main_arena_offset
+
+seccomp
+	https://github.com/david942j/seccomp-tools
+
