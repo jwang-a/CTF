@@ -1,0 +1,6 @@
+###if write to file fails, the file will be empty
+###ulimit can set limit to maximum write size to file
+###WARNING : directly executing ./otp 0 will trigger SIGXFSZ
+###          but running it as subprocess will bypass this problem
+
+ulimit -f 0 && python -c "import os; os.system('./otp 0')"
