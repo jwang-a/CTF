@@ -1,0 +1,3 @@
+###Absolute path and wildcards are useful
+
+./cmd1 "/bin/cat f???"

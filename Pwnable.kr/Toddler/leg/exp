@@ -1,0 +1,13 @@
+###This problem requires input_key = key1()+key2()+key3()
+###r0 is the return value in arm
+###pc is instruction pointer(always point to next next instruction)
+###lr is return addr
+###bx is unconditional branch
+###There are two modes(ARM(32bit) and THUMB(16bit)) in arm, the corresponding instruction length is 4bytes/2bytes
+###Only bx is allowed to change between mode
+###Upon bx execution, the last bit of target register is used as mode switch
+###(0-> ARM, 1 -> THUMB), then cleared before jump
+
+key1() = 0x8ce4
+key2() = 0x8d0c
+key3() = 0x8d80

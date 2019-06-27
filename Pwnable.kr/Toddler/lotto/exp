@@ -1,0 +1,2 @@
+###misconfiguration causes a "match" to happend on matching any single char
+###input the same char six times, and success rate will be high enough

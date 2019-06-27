@@ -1,0 +1,2 @@
+upx -d to unpack flag
+open with IDA to see flag
