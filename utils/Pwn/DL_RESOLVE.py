@@ -50,28 +50,59 @@ class Elf_Rel(object):
     def __init__(self,arch=64):
         '''
         typedef struct{
-            Elf_Addr r_offset;
-            Elf_Word r_info;
-        }Elf_Dyn;
+            Elf_Addr r_offset;  //addr of got
+            Elf_Word r_info;  //symbol index and relocation type; R_SYM=r_info>>32(8); R_TYPE=r_info&0xffffffff(0xff) 
+        }Elf_Rel;
+	
+	R_TYPE
+	    7 R_JMP_SLOT
         '''
         self.arch = arch
     def construct(self,r_offset=0,r_info=0):
         if self.arch==32:
-            return p32(r_offset)+p32(r_info)
+            return p32(r_offset)+p32(r_info)+p32(0)
         elif self.arch==64:
-            return p64(r_offset)+p64(r_info)
+            return p64(r_offset)+p64(r_info)+p64(0)
 
 class Elf_Sym(object):
     def __init__(self,arch=64):
         '''
         typedef struct{
-            Elf_Word st_name;
-            unsigned char st_info;
-            unsigned char st_other;
-            Elf_Section st_shndx;
-            Elf_Addr st_value;
-            Elf_Word st_size;
+            Elf_Word st_name;	//offset to string table
+            unsigned char st_info;	//symbol type and binding; ST_BIND=st_info>>4 ; ST_TYPE=st_info&0xf
+            unsigned char st_other;	//symbol visibility; ST_VISIBILITY=st_other&0x3
+            Elf_Section st_shndx;	//section index
+            Elf_Addr st_value;	//symbol value if exported
+            Elf_Word st_size;	//symbol size
         }Elf_Sym
+
+        ST_BIND
+            0 STB_LOCAL
+            1 STB_GLOBAL
+            2 STB_WEAK
+            10 STB_LOOS
+            12 STB_HIOS
+            13 STB_LOPROC
+            15 STB_HIPROC
+
+        ST_TYPE
+            0 STT_NOTYPE
+            1 STT_OBJECT
+            2 STT_FUNC
+            3 STT_SECTION
+            4 STT_FILE
+            5 STT_COMMON
+            6 STT_TLS
+            10 STT_LOOS
+            12 STT_HIOS
+            13 STT_LOPROC
+            15 STT_HIPROC
+
+        ST_VISIBILITY
+            0 STV_DEFAULT
+            1 STV_INTERNAL
+            2 STV_HIDDEN
+            3 STV_PROTECTED
         '''
         self.arch = arch
     def construct(self,st_name=0,st_info=0,st_other=0,st_shndx=0,st_value=0,st_size=0):
@@ -80,6 +111,18 @@ class Elf_Sym(object):
         elif self.arch==64:
             return p32(st_name)+p8(st_info)+p8(st_other)+p16(st_shndx)+p64(st_value)+p64(st_size)
 
+'''
+r_debug
+    |    4    |    4    |    4    |    4    |
+0x00|r_version|    x    |   linkmap *rmap   |
+0x10|      r_brk        |         x         |
+0x20|    r_ld_base      |         x         |
+'''
+
 
 ###Reference
 #  https://code.woboq.org/userspace/glibc/elf/elf.h.html
+#  http://refspecs.linuxbase.org/elf/gabi4+/ch4.reloc.html
+#  http://refspecs.linuxbase.org/elf/gabi4+/ch4.symtab.html
+#  https://code.woboq.org/userspace/glibc/elf/link.h.html#r_debug
+#  https://www.usenix.org/system/files/conference/usenixsecurity15/sec15-paper-di-frederico.pdf
