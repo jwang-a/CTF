@@ -13,3 +13,9 @@ main_arena
 seccomp
 	https://github.com/david942j/seccomp-tools
 
+
+
+
+Useful Commands
+	find string in binary
+		strings -a -t x [FILE] | grep [STRING]
