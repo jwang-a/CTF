@@ -174,6 +174,7 @@ A complete walkthrough will be shown below
     this is understandable since some env are related to remote connection ip and will only exist at runtime, but also annoying
     to acquire exact amout, try forcing a realloc with setenv() and monitor behaviour by leaking heap addr
     the technique will be shown in leakenv.py
+    additionally, an easier way to leak libc_base is also included in leakenv.py
 '''
 
 ###Initialize
