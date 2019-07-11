@@ -1,0 +1,33 @@
+critical_heap:
+    build: ./
+    environment:
+        - PWN=yes
+        - DDAA=phd
+        - OLDPWD=/home
+        - LOGNAME=critical_heap++
+        - XDG_RUNTIME_DIR=/run/user/1000
+        - LESSOPEN=| /usr/bin/lesspipe %s
+        - LANG=en_US
+        - SHLVL=1
+        - SHELL=/bin/bash
+        - ID=1337
+        - HOSTNAME=pwnable.tw
+        - MAIL=/var/mail/critical_heap++
+        - HEAP=fun
+        - FLAG=/
+        - ROOT=/
+        - TCP_PORT=56746
+        - PORT=4869
+        - X_PORT=56746
+        - SERVICE=critical_heap++
+        - XPC_FLAGS=0x0
+        - TMPDIR=/tmp
+        - RBENV_SHELL=bash
+    volumes:
+        - ./share:/home/critical_heap++:ro
+        - ./xinetd:/etc/xinetd.d/critical_heap:ro
+        - ./tmp:/tmp:ro
+    ports:
+        - "56746:4869"
+    expose:
+        - "4869"
