@@ -174,6 +174,10 @@ A complete walkthrough will be shown below
     to acquire exact amout, try forcing a realloc with setenv() and monitor behaviour by leaking heap addr
     the technique will be shown in leakenv.py
     additionally, an easier way to leak libc_base is also included in leakenv.py
+
+**  An alternative way to exploit is to overwrite name ptr on one of the blocks
+    then use that ptr to overwrite other target
+    this allows us to target free_hook or IO_list_all and craft an exploit independent of the constraints on one_gadget
 '''
 
 ###Initialize
