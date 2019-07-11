@@ -1,3 +1,5 @@
+###Crazy heap exploit related to localtime(), setenv() and realpath()
+
 from pwn import *
 
 ###Structures
