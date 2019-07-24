@@ -41,6 +41,8 @@ r.interactive()
 
 ###Reference
 #   constructor/destructor
-#   https://docs.oracle.com/cd/E19683-01/817-1983/6mhm6r4es/index.html
+#       https://docs.oracle.com/cd/E19683-01/817-1983/6mhm6r4es/index.html
 #   .fini_array
-#   http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html
+#       http://refspecs.linuxbase.org/LSB_3.0.0/LSB-PDA/LSB-PDA/specialsections.html
+#   dl_fini
+#       https://code.woboq.org/userspace/glibc/elf/dl-fini.c.html
