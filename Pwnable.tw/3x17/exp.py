@@ -1,5 +1,4 @@
 ###destructor(.fini_array)
-#  exit() -> __run_exit_handlers() -> __call_tls_dtors() -> _dl_fini() -> destructor
 
 from pwn import *
 
