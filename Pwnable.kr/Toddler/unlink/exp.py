@@ -14,7 +14,7 @@ shell_addr = 0x80484eb
 ###Exploit
 ###The basic idea in overwriting return address with shell() address using unlink
 ###However, directly doing so would cause some write in shell() code, and cause segfault
-###So the problem inserted some stub into binary to make problem solvable
+###Thankfully, 32 bit x86 stack frame handling can be leveraged to bypass this
 '''
  804852f: 8d 4c 24 04          	lea    ecx,[esp+0x4]            ***
  8048533: 83 e4 f0             	and    esp,0xfffffff0
@@ -31,7 +31,7 @@ shell_addr = 0x80484eb
  8048603: 8d 61 fc             	lea    esp,[ecx-0x4]            ***
  8048606: c3                   	ret
 
-The starred lines are the unusual ones
+The starred lines are the critical ones
 What it does is basically storing a pointer to the return address at ebp-0x4
 And dereferencing it twice to get return address upon leaving main
 
