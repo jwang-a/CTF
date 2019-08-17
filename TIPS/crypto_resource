@@ -10,3 +10,6 @@ factorizer
 
 hashpump
 	https://github.com/bwall/HashPump
+
+All kinds of sage scripts for RSA
+	https://github.com/ValarDragon/CTF-Crypto/tree/master/RSA

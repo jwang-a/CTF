@@ -13,9 +13,17 @@ main_arena
 seccomp
 	https://github.com/david942j/seccomp-tools
 
-
+libc_database
+	https://github.com/niklasb/libc-database
 
 
 Useful Commands
 	find string in binary
 		strings -a -t x [FILE] | grep [STRING]
+
+Settings
+	ASLR settings :/proc/sys/kernel/randomize_va_space 
+		0 : disabled
+		2 : enabled	
+		temporarily disable ASLR for file
+			** setarch $(uname -m) -R [FILE]
