@@ -3,6 +3,7 @@ from pwn import *
 
 
 class Elf_Dyn(object):
+    ###Under construction
     def __init__(self,arch=64):
         '''
         typedef struct{
@@ -24,6 +25,7 @@ class Elf_Dyn(object):
             return p64(d_tag)+p64(d_un)
 
 class Elf_Shdr(object):
+    ###Under construction
     def __init__(self,arch=64):
         '''
         typedef struct{
@@ -60,7 +62,7 @@ class Elf_Rel(object):
         self.arch = arch
     def construct(self,r_offset=0,r_info=0):
         if self.arch==32:
-            return p32(r_offset)+p32(r_info)+p32(0)
+            return p32(r_offset)+p32(r_info)
         elif self.arch==64:
             return p64(r_offset)+p64(r_info)+p64(0)
 
@@ -75,7 +77,6 @@ class Elf_Sym(object):
             Elf_Addr st_value;	//symbol value if exported
             Elf_Word st_size;	//symbol size
         }Elf_Sym
-
         ST_BIND
             0 STB_LOCAL
             1 STB_GLOBAL
@@ -84,7 +85,6 @@ class Elf_Sym(object):
             12 STB_HIOS
             13 STB_LOPROC
             15 STB_HIPROC
-
         ST_TYPE
             0 STT_NOTYPE
             1 STT_OBJECT
@@ -97,7 +97,6 @@ class Elf_Sym(object):
             12 STT_HIOS
             13 STT_LOPROC
             15 STT_HIPROC
-
         ST_VISIBILITY
             0 STV_DEFAULT
             1 STV_INTERNAL
@@ -107,9 +106,25 @@ class Elf_Sym(object):
         self.arch = arch
     def construct(self,st_name=0,st_info=0,st_other=0,st_shndx=0,st_value=0,st_size=0):
         if self.arch==32:
-            return p32(st_name)+p8(st_info)+p8(st_other)+p16(st_shndx)+p32(st_value)+p32(0)+p32(st_size)+p32(0)
+            return p32(st_name)+p32(st_value)+p32(st_size)+p8(st_info)+p8(st_other)+p16(st_shndx)
         elif self.arch==64:
             return p32(st_name)+p8(st_info)+p8(st_other)+p16(st_shndx)+p64(st_value)+p64(st_size)
+
+def Elf_Versym(object):
+    def __init__(self,arch=64):
+        '''
+        int16 version
+        
+        reserved value:
+            0 local symbol
+            1 defined locally and global available
+        '''
+        self.arch=arch
+    def construct(self,version):
+        if self.arch==32:
+            return p16(version)
+        elif self.arch==64:
+            return p16(version)
 
 '''
 r_debug
@@ -126,3 +141,4 @@ r_debug
 #  http://refspecs.linuxbase.org/elf/gabi4+/ch4.symtab.html
 #  https://code.woboq.org/userspace/glibc/elf/link.h.html#r_debug
 #  https://www.usenix.org/system/files/conference/usenixsecurity15/sec15-paper-di-frederico.pdf
+#  https://lists.debian.org/lsb-spec/1999/12/msg00017.html

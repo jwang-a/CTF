@@ -41,6 +41,26 @@ class IO_FILE_plus(object):
             };
             strcut _IO_jump_t *vtable;
         };
+
+	Flag:
+		_IO_MAGIC         0xFBAD0000 Magic number
+		_IO_MAGIC_MASK    0xFFFF0000
+		_IO_USER_BUF          0x0001 Don't deallocate buffer on close
+		_IO_UNBUFFERED        0x0002
+		_IO_NO_READS          0x0004 Reading not allowed
+		_IO_NO_WRITES         0x0008 Writing not allowed
+		_IO_EOF_SEEN          0x0010
+		_IO_ERR_SEEN          0x0020
+		_IO_DELETE_DONT_CLOSE 0x0040 Don't call close(_fileno) on close
+		_IO_LINKED            0x0080 In the list of all open files.
+		_IO_IN_BACKUP         0x0100
+		_IO_LINE_BUF          0x0200
+		_IO_TIED_PUT_GET      0x0400 Put and get pointer move in unison
+		_IO_CURRENTLY_PUTTING 0x0800
+		_IO_IS_APPENDING      0x1000
+		_IO_IS_FILEBUF        0x2000
+				      0x4000 No longer used, reserved for compatability
+		_IO_USER_LOCK         0x8000
         '''
         self.arch=arch
     def construct(self,flags=0,read_ptr=0,read_end=0,read_base=0,write_base=0,write_ptr=0,write_end=0,buf_base=0,buf_end=0,save_base=0,backup_base=0,save_end=0,markers=0,chain=0,fileno=0,flags2=0,old_offset=0,cur_column=0,vtable_offset=0,shortbuf=0,lock=0,offset=0,codecvt=0,wide_data=0,freeres_list=0,freeres_buf=0,pad5=0,mode=0,unused2=b'\x00'*20,vtable=0):
@@ -88,3 +108,4 @@ class IO_jump_t(object):
 ###Reference
 #  https://code.woboq.org/userspace/glibc/libio/bits/types/struct_FILE.h.html
 #  https://code.woboq.org/userspace/glibc/libio/libioP.h.html
+#  https://code.woboq.org/userspace/glibc/libio/libio.h.html

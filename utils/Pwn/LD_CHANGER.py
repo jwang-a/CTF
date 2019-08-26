@@ -2,10 +2,9 @@
 Copied and modified from https://www.cnblogs.com/0x636a/p/9157993.html
 All credits ro original author
 '''
-LD_PATH = ''
-
 from pwn import *
 import sys, os
+
 def change_ld(binary, ld):
     """
     Force to use assigned new ld.so by changing the binary
@@ -39,7 +38,11 @@ def change_ld(binary, ld):
             binary.save(path)    
             os.chmod(path, 0b111000000) #rwx------
     print("PT_INTERP has changed from {} to {}. Using temp file {}".format(data, ld, path)) 
-    return ELF(path)
-#example
-elf = change_ld('./john_cena', LD_PATH)
+    return
+
+if len(sys.argv)!=3:
+    print('Usage : python3 LD_PRELOAD.py [ld] [bin]')
+LD_PATH = sys.argv[1]
+BIN = sys.argv[2]
+change_ld(BIN, LD_PATH)
 ###Execute file by 'LD_PRELOAD={target_libc} ./executable'
