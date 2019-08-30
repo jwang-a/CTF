@@ -1,2 +1,13 @@
 .NET decompile (dnSpy)
 	https://github.com/0xd4d/dnSpy
+
+PE analysis
+	https://github.com/zeroq/peanalysis
+
+
+###
+IDA commands
+	[edit] -> [patch program] -> [change byte] -> edit instruction
+	u -> undefine instruction
+	c -> mark assembly as code
+	p -> mark offset as function

@@ -7,6 +7,9 @@ pwngdb
 peda
 	https://github.com/longld/peda
 
+r2 
+	https://github.com/radare/radare2
+
 main_arena
 	https://github.com/bash-c/main_arena_offset
 
@@ -27,3 +30,11 @@ Settings
 		2 : enabled	
 		temporarily disable ASLR for file
 			** setarch $(uname -m) -R [FILE]
+	Common CTF compile options
+		-m32
+		-mpreferred-stack-boundary=[num]
+		-no-pie -fPIE -pie
+		-z,relro/now
+		-z execstack/noexecstack
+		-fstack-protector -fno-stack-protector
+		

@@ -30,8 +30,7 @@ def change_ld(binary, ld):
                 log.failure("Failed to change PT_INTERP from {} to {}".format(data, ld))
                 return None
             binary.write(addr, ld.encode().ljust(size, b'\0'))
-            if not os.access('/tmp/pwn', os.F_OK): os.mkdir('/tmp/pwn')
-            path = '/tmp/pwn/{}_debug'.format(os.path.basename(binary.path))
+            path = binary.path.split('/')[-1][0].upper()
             if os.access(path, os.F_OK): 
                 os.remove(path)
                 print("Removing exist file {}".format(path))

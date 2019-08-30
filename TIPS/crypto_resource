@@ -11,5 +11,11 @@ factorizer
 hashpump
 	https://github.com/bwall/HashPump
 
+md5-tunnel
+	https://github.com/s1fr0/md5-tunneling
+
+sage
+	https://github.com/sagemath
+
 All kinds of sage scripts for RSA
 	https://github.com/ValarDragon/CTF-Crypto/tree/master/RSA
