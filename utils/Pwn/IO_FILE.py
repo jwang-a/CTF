@@ -103,7 +103,14 @@ class IO_jump_t(object):
         elif self.arch==64:
             return p64(dummy)+p64(dummy2)+p64(finish)+p64(overflow)+p64(underflow)+p64(uflow)+p64(pbackfail)+p64(xsputn)+p64(xsgetn)+p64(seekoff)+p64(seekpos)+p64(setbuf)+p64(sync)+p64(doallocate)+p64(read)+p64(write)+p64(seek)+p64(close)+p64(stat)+p64(showmanyc)+p64(imbue)
 
-
+def find_IO_str_jumps(fname):
+    libc = ELF(fname)
+    IO_file_jumps_offset = libc.sym[b'_IO_file_jumps']
+    IO_str_underflow_offset = libc.sym[b'_IO_str_underflow']
+    for ref_offset in libc.search(p64(IO_str_underflow_offset)):
+        possible_IO_str_jumps_offset = ref_offset - 0x20
+        if possible_IO_str_jumps_offset > IO_file_jumps_offset:
+            return possible_IO_str_jumps_offset
 
 ###Reference
 #  https://code.woboq.org/userspace/glibc/libio/bits/types/struct_FILE.h.html
