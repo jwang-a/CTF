@@ -1,4 +1,4 @@
-###HITCON QUAL 2019
+### HITCON QUAL 2019
 
 I played hitcon quals this year with Flagiarism  
 We once reached 3rd place at the end of day1, but fell to 30th at the end day2 QQ  
