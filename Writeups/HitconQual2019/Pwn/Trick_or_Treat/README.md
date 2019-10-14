@@ -4,15 +4,15 @@
 The binary is rather simple. The basic program flow can be summarized as below
 
 ```
-    Addr = malloc(arbitrary_size)
-    printf("%p",Addr)
+Addr = malloc(arbitrary_size)
+printf("%p",Addr)
 
-    for i in range(2):
-        write(...)
-        scanf("%lx %lx",&pos,&dat)
-        *pos = data
+for i in range(2):
+    write(...)
+    scanf("%lx %lx",&pos,&dat)
+    *pos = data
 
-    _exit()
+_exit()
 ```
 
 All protections are enabled
