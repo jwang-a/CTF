@@ -17,7 +17,7 @@ The binary is rather simple. The basic program flow can be concluded as below
 
 All protections are enabled
 
-##Exploit
+## Exploit
 
 ### Libc leak
 There is a well known technique that by allocating a buffer large enough, it will end up being aligned right in front of glibc, this allows us to leak glibc address with the first printf.
