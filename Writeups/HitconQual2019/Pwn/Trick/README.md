@@ -1,7 +1,7 @@
 # Trick or Treat
 
 ## Problem Overcap
-The binary is rather simple. The basic program flow can be concluded as below
+The binary is rather simple. The basic program flow can be summarized as below
 
 ```
     Addr = malloc(arbitrary_size)
