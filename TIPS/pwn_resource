@@ -1,5 +1,8 @@
 pwntools
 	https://github.com/arthaud/python3-pwntools
+	(install architecture for shellcoding on mac)
+		https://github.com/Gallopsled/pwntools-binutils/
+		brew install https://raw.githubusercontent.com/Gallopsled/pwntools-binutils/master/osx/binutils-$ARCH.rb
 
 pwngdb
 	https://github.com/scwuaptx/Pwngdb
@@ -30,11 +33,18 @@ Settings
 		2 : enabled	
 		temporarily disable ASLR for file
 			** setarch $(uname -m) -R [FILE]
-	Common CTF compile options
+	Common ELF compile options
 		-m32
 		-mpreferred-stack-boundary=[num]
 		-no-pie -fPIE -pie
 		-z,relro/now
 		-z execstack/noexecstack
 		-fstack-protector -fno-stack-protector
-		
+
+	Common mach-o compile options
+		otool -hv
+		-fpie -fno-pie
+		-fstack-protector -fno-stack-protector
+
+Some random tips
+	any operation on func_address(ex. printf("%p\n",&func), void *a=&printf+1) forces func to become full relro(regardless of compile option)

