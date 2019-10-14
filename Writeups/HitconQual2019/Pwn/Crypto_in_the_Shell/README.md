@@ -42,12 +42,13 @@ The easiest way to do this is to construct a ROPchain at return address of main,
 It turns out that the modern cryptography algorithms has a few good properties that come in handy. Modern crypto often requires output to 'seem random', this property allows us to make the assumption that for AES-CBC, the chance for first byte of ciphertext to be equal to a certain character C = $\frac{1}{256}$
 
 How to write ROPchain onto stack is now clear :  
-	+ keep encrypting data in buffer until first byte is set to intended payload, move the buffer forward one byte and repeat process.
+\ \ \ \ keep encrypting data in buffer until first byte is set to intended payload, move the buffer forward one byte and repeat process.
 
 Now the last limitation needed to be bypasses is limited rounds of encryption, the approach mentioned above takes about 128 rounds to set one byte, and a useful ROPchain contains at least 24 bytes, summing up to an expected 3072 rounds, taking into consideration that \_environ needs to be cleared for system("/bin/sh") to work, the required rounds would only increase.
 
 The key here is to set counter on stack to a large negative value. This would allow close to unlimited rounds of encryption. Looking at the runtime stack, nothing within the 16 bytes after &counter needs to be preserved, so it is safe to encrypt it. Now directly setting offset to &counter and encrypting it has approximately 1/2 chance to succeed, which is good enough to blindly try it. But there is actually a way to ensure the exploit succeeds with about $\frac{2^{28}-1}{2^{28}}$ chance. As the 16 bytes after &counter is predictable, we can simulate the encryption locally and check if result satisfies our need. If not, encrypt IV to change the encryption result. Repeat this process several times and we are bound to hit the jackpot.
 
+And don't forget to set counter back to some value>32 after finishing writing ROPchain to trigger return
 
 ### Handle Timeout 
 So now we have changed counter, written ROPchain, everything done? The answer is no...
