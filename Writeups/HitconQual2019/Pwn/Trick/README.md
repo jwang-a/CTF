@@ -1,6 +1,6 @@
-## Trick or Treat
+# Trick or Treat
 
-### Problem Overcap
+## Problem Overcap
 The binary is rather simple. The basic program flow can be concluded as below
 
 ```
@@ -17,14 +17,15 @@ The binary is rather simple. The basic program flow can be concluded as below
 
 All protections are enabled
 
+##Exploit
 
-#### Libc leak
+### Libc leak
 There is a well known technique that by allocating a buffer large enough, it will end up being aligned right in front of glibc, this allows us to leak glibc address with the first printf.
 
 We can also choose to malloc a not-so-large buffer to have it end up in front of ld, but since \_exit() is called here, there is no chance of hijacking atexit() functions, so this option is not really a choice
 
 
-#### First attempt
+### First attempt
 Now we have libc\_base, the problem is where to write?  
 It is common to hijack hooks, namely malloc\_hook, free\_hook and realloc\_hook  
 
@@ -38,14 +39,14 @@ This small difference completely spoils the entire exploit
 
 I also tried hijacking free\_hook and realloc\_hook, and with other available one\_gadgets, but after testing all combinations, none of them work on the remote server.  
 
-#### Second attempt
+### Second attempt
 Okay, so how about hijacking free\_hook with system(), and sending argument in second payload?  
 
 This approach seems promising, but I soon faced the problem where "%lx" takes only hexadecimal digits [0-9,a-f], and as far as I know, there are no commands consisting of just these 16 characters and is able to spawn a shell. (It was only after reading other's writeup did I realize that we can actually call system("ed"); and pass "!sh" to it to get shell)  
 
 Since hijacking those hooks failed, I decided to dive deeper into scanf source code and try to figure out how to trigger malloc/free while allowing me to sneak in "/bin/sh", the attempt failed, but allowed me to gain enough knowledge and pwn the problem using the inner mechanisms of scanf()  
 
-#### Final Exploit
+### Final Exploit
 I wiil just explain the concept here, related code snippets from glibc can be found in appendix
 
 Since the problem with the original one\_gadget approach sprouts from different stack layout, if I can probe the stack up and down for a bit, there is a high chance that the exploit will now succeed  
