@@ -41,8 +41,7 @@ The easiest way to do this is to construct a ROPchain at return address of main,
 
 It turns out that the modern cryptography algorithms has a few good properties that come in handy. Modern crypto often requires output to 'seem random', this property allows us to make the assumption that for AES-CBC, the chance for first byte of ciphertext to be equal to a certain character C = $\frac{1}{256}$
 
-How to write ROPchain onto stack is now clear :  
-\ \ \ \ keep encrypting data in buffer until first byte is set to intended payload, move the buffer forward one byte and repeat process.
+How to write ROPchain onto stack is now clear : keep encrypting data in buffer until first byte is set to intended payload, move the buffer forward one byte and repeat process
 
 Now the last limitation needed to be bypasses is limited rounds of encryption, the approach mentioned above takes about 128 rounds to set one byte, and a useful ROPchain contains at least 24 bytes, summing up to an expected 3072 rounds, taking into consideration that \_environ needs to be cleared for system("/bin/sh") to work, the required rounds would only increase.
 
