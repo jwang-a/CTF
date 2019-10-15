@@ -1,5 +1,17 @@
 # Crypto in the Shell
 
+## Index
+[Index](#index)
+
+[Problem Overcap](#problem-overcap)
+
+[Exploit](#exploit)
+	* [Vulnerability](#vulnerability)
+	* [Control Key](#control-key)
+	* [Address Leak](#leak-codebase-libcbase-and-stackaddr)
+	* [Hijack flow](#bypass-encryption-rounds-limitation-hijack-flow)
+	* [Handle Timeout](#handle-timeout) 
+
 ## Problem Overcap
 The program provides a simple AES-CBC encrypt service, with the specification as below
 1. padding is done by simply modifying plaintext length to multiples of 0x10
@@ -18,7 +30,7 @@ The program takes an offset to the *bufer*, and uses it to find where to encrypt
 Moreover, offset is a 64 bit value, meaning we can access anywhere inside as long as the code\_base and target\_address is known  
 The only limitation is that since encryption is done inplace, only writeable sections are accessible  
 
-### Control key
+### Control Key
 Since it a legimate AES-CBC encryption, the first step to be able to interpret encrypted data is to leak key and iv
 
 iv is known to be 0, so the only thing left it to leak key. The way to achieve this is to set offset to point to *&key* on bss, the program then encypts the key in place and outputs it. Though we still have no idea what the *original\_key* is, the program will use the encrypted *key* as future key from now on.
@@ -57,3 +69,7 @@ The network interaction speed is too slow for the encrypt -> get result -> check
 Since the bottleneck lies in communication, if we can model the entire process locally and send payload at once, it can be bypassed. To do this, we first encrypt one first time with length=payload\_length+0x10 to get stack content. After getting stack content, it is now possible to carry out the entire byte by byte probing locally
 
 Another problem sprouts after finishing implementing the local probing. The complete payload is too large to be sent in one shot. Apparently, output buffer of remote process fills up and the process will refuse to continue before we read output buffer. Handling this problem is quite easy, just break the payload into several chunks, send them one by one and read the remote process output in between. After some experiment, setting chunk size=10000 seems like a reasonable tradeoff point.
+
+
+
+[Top](#crypto-in-the-shell)
