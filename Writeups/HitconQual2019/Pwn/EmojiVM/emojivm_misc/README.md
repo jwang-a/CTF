@@ -41,7 +41,7 @@ START_LOOP:
 		goto CARRY_EXIST
 	stackpop
 
-	CARRY_EXIST:
+CARRY_EXIST:
 	//prepare expression for printing
 	stackpush(Storage[0][2])
 	stackpush(Storage[0][1])
