@@ -92,8 +92,10 @@ Since we can alter heap pointers, let's see what can be done to leak address.
 To leak libc\_base, the most intuitive way is to free a unsorted\_bin\_chunk and leak the pointer, and in libc2.27, this means freeing a chunk of large\_bin size. But actually, due to the indirect reference through meta chunk, leaking the pointer directly would be a little bit harder than dereferencing it and using it to leak pointers in main_arena  
 
 The procedure would be something as below
-1. S0 = create(0x500)	# target chunk
-2. (create(0x10))*9		# pad up storage index
+1. S0 = create(0x500)
+	* target chunk
+2. (create(0x10))*9
+	* pad up storage index
 3. delete(S0)
 4. delete(S9)
 5. S0 = create(0x10)	# replace S0 with original S9 chunk
