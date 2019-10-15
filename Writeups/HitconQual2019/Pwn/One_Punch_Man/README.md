@@ -177,9 +177,10 @@ The entire procedure can be illustrated as below, notice the difference between 
 19. edit(C1, padding+fakeC2chunk(size=0x90, prev\_inuse=False, prev\_size=0x300, next\_chunk is valid)+fakeunsortedchunk(addr=C3+0x10))
 20. delete(C2)
 
-Most of the difference are trivially understandable, the only one probably needs some explaination is #19  
-The fake\_unsorted\_chunk here need not be a legimate chunk, it is assigned to satisfy the need for unlinking properly  
-The only check in unlink is  
+Most of the difference are trivially understandable, the only step that probably needs some explanation is #19  
+The fake\_unsorted\_chunk in this need not be a legimate chunk, it is assigned to satisfy the needs for unlinking properly  
+
+As we all know the only check in unlink is  
 ```
 if (__builtin_expect (fd->bk != p || bk->fd != p, 0))
 	malloc_printerr ("corrupted double-linked list");
@@ -191,7 +192,9 @@ So to unlink properly, we have to set
 Since both fd, bk of tcache\_fake\_chunk = C3+0x10
 fd, bk of C3+0x10 must be set to tcache\_fake\_chunk
 
-the heap before finally freeing C2 to trigger unlink will look like
+
+
+Here is what the heap will look like before finally freeing C2 to trigger unlink
 ```
      |       8       |       8       |
                     ...
