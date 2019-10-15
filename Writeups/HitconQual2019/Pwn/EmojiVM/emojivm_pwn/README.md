@@ -1,5 +1,17 @@
 # EmojiiiVM (pwn)
 
+## Index
+*   [Index](#index)
+
+*   [Problem Overcap](#problem-overcap)
+
+*   [Exploit](#exploit)
+    *   [Vulnerability](#vulnerability)
+    *   [Address Leak](#leak-libc_base)
+    *   [Hijack Flow](#create-arbitrary-write--get-shell)
+    *   [EmojiLang Wrapping](#writing-the-payload-in-emojilang)
+
+
 ## Problem Overcap
 
 VM Pwn!!!  
@@ -196,3 +208,7 @@ As writing in emoji is confusing and troublesome, I wrote a simple assembler(som
 And as one can easily see, there are a few invalid operation(such as push 0x68) in the instructions above. Making the assembler able to parse those instructions is a harass, so I manually expanded them into valid arthimetic instructions that provide the wanted result
 
 The length limit is large and can be ignored as long as you don't do anything silly and produce large sections of garbage code. I personally didn't spend any time optimizing code length (even sacrificing it for code simplicity), and still met the requirements.
+
+
+
+[Top](#emojiiivm-pwn)
