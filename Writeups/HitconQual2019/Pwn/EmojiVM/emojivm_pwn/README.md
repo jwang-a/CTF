@@ -95,7 +95,7 @@ all protections are enabled
 
 ## Exploit
 
-### Vulnerabilty
+### Vulnerability
 The main vulnerability here lies in the arthemetic operations. Those operations pop the stack without performing any checks, and this allows us to tamper with the storage pointer stored before stack.  
 
 
