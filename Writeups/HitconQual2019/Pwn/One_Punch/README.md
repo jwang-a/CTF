@@ -99,12 +99,12 @@ Since an arbitrary malloc is necessary(even for just hijacking hooks), we must s
 
 Lets first lay out the tcache structure as below  
 ```
-	 |		 8		 |		 8		 |
-0x000|	   unused	 |			  251|
-0x010|				 |				 | <- counts for size 0x20  ~ 0x110
-0x020|				 |				 | <- counts for size 0x120 ~ 0x210
-0x030|				 |				 | <- counts for size 0x220 ~ 0x310
-0x040|				 |				 | <- counts for size 0x320 ~ 0x410
+     |       8       |       8       |
+0x000|     unused    |            251|
+0x010|               |               | <- counts for size 0x20  ~ 0x110
+0x020|               |               | <- counts for size 0x120 ~ 0x210
+0x030|               |               | <- counts for size 0x220 ~ 0x310
+0x040|               |               | <- counts for size 0x320 ~ 0x410
 0x050| entry_for_0x20| entry_for_0x30|
  					...
 ```
@@ -119,9 +119,9 @@ Notice that since we never had a chance to create chunk of size 0x20 or 0x30, cr
 
 The result should be like
 ```
-	 |		 8		 |		 8		 |
-					...
-0x040|				 |			  301| <- tcache\_fake\_chunk
+     |       8       |       8       |
+                    ...
+0x040|               |            301| <- tcache\_fake\_chunk
 0x050|ptr2freed\_0x20|ptr2freed\_0x30|
 ```
 
@@ -141,14 +141,14 @@ So we now have to try to perfrom unlink on that chunk, to do so, we must utilize
 
 The heap before finally freeing C2 to trigger unlink should look something like this
 ```
-	 |		 8		 |		 8		 |
-0x250|	   unused	 |			   f1|
-					...
-0x340|			  300|			   90| <- C2
-					...
-0x3d0|				 |			   71| <- next chunk for C2, so that freeing C2 will not trigger any error
-					...
-0x440|				 |			   91| <- C3
+     |       8       |       8       |
+0x250|     unused    |             f1|
+                    ...
+0x340|            300|             90| <- C2
+                    ...
+0x3d0|               |             71| <- next chunk for C2, so that freeing C2 will not trigger any error
+                    ...
+0x440|               |             91| <- C3
 ```
 
 
@@ -193,26 +193,26 @@ fd, bk of C3+0x10 must be set to tcache\_fake\_chunk
 
 the heap before finally freeing C2 to trigger unlink will look like
 ```
-	 |		 8		 |		 8		 |
-					...
-0x040|				 |			  301|
-0x050|	 heap+0x450	 |	 heap+0x450	 | <- tcache\_fake\_chunk
-					...
-0x250|	   			 |			   f1|
-					...
-0x340|			  300|			   90| <- C2
-					...
-0x3d0|				 |			   71| <- next chunk for C2, so that freeing C2 will not trigger any error
-					...
-0x440|				 |			   91| <- C3
-0x450|				 |				 | <- fake\_unsorted\_chunk
-0x460|	 heap+0x40	 |	 heap+0x40	 |
+     |       8       |       8       |
+                    ...
+0x040|               |            301|
+0x050|   heap+0x450  |   heap+0x450  | <- tcache\_fake\_chunk
+                    ...
+0x250|               |             f1|
+                    ...
+0x340|            300|             90| <- C2
+                    ...
+0x3d0|               |             71| <- next chunk for C2, so that freeing C2 will not trigger any error
+                    ...
+0x440|               |             91| <- C3
+0x450|               |               | <- fake\_unsorted\_chunk
+0x460|   heap+0x40   |   heap+0x40   |
 ```
 
 after freeing, we will finally have the tcache\_fake\_chunk placed in unsorted bin  
 At this point we can edit tcache entry for 0x220 easily
 
-### Exploit Under Seccomp
+### Deal with Seccomp
 So we have the ability to malloc to arbitrary position, or maybe not?  
 
 Turn out that we forgot to flood up tcache count for 0x220, but this can be easily done by adding some create and delete between step 7 and step 8  
@@ -221,11 +221,11 @@ To bypass seccomp, we have to write a ROPchain, and that would most definitely b
 
 Another trivial problem here is main never returns, but we can overwrite return address of serious\_punch anyway...
 
-And just some small tips, writing in ROPchain is a hassle, so why not just create ROPchain to call mprotect to make .bss executable, write shellcode in .bss and jump to it? Would certainly make life easier
+And just some small tips, writing syscalls in ROPchain is a hassle, so why not just create ROPchain thats calls mprotect to make .bss executable, write shellcode in .bss and jump to it? This would certainly make life easier
 
 ### Where to find flag?
 One last thing, with only open/read/write, how should I know where the flag is?  
 
-The author is kind enough to make path to the program reasonable(/home/ctf/flag), but I was too dumb to guess it. One thing I know is that conventionally, flags are placed in files named 'flag' or 'flag.txt', and usually resides in either root dir or in the same dir as program.
+The author is kind enough to make path to the program reasonable (/home/ctf/flag), but I was too dumb to guess it. One thing I know is that conventionally, flags are placed in files named 'flag' or 'flag.txt', and usually resides in either root dir or in the same dir as program.
 
 So I decided to read /proc/self/maps to leak the path to executable, and finally got the flag
