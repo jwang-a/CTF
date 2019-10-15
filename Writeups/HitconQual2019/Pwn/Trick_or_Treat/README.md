@@ -1,5 +1,18 @@
 # Trick or Treat
 
+## Index
+*   [Index](#index)
+
+*   [Problem Overcap](#problem-overcap)
+
+*   [Exploit](#exploit)
+    *   [Libc Leak](#libc-leak)
+    *   [Failed attempt 1 : one\_gadget](#first-attempt)
+    *   [Failed attempt 2 : system('/bin/sh')](#second-attempt)
+    *   [Exploiting stdin IO\_FILE](#final-exploit)
+
+*   [Appendix](#appendix)
+
 ## Problem Overcap
 The binary is rather simple. The basic program flow can be summarized as below
 
@@ -338,3 +351,5 @@ int _IO_new_file_underflow (FILE *fp){
 	return *(unsigned char *) fp->_IO_read_ptr;
 }
 ```
+
+[Top](trick-or-treat)
