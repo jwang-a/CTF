@@ -189,7 +189,7 @@ So to unlink properly, we have to set
 1. tcache\_fake\_chunk -> fd -> bk = tcache\_fake\_chunk
 2. tcache\_fake\_chunk -> bk -> fd = tcache\_fake\_chunk
 
-Since both fd, bk of tcache\_fake\_chunk = C3+0x10
+Since both fd, bk of tcache\_fake\_chunk = C3+0x10  
 fd, bk of C3+0x10 must be set to tcache\_fake\_chunk
 
 
