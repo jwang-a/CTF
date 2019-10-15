@@ -99,11 +99,11 @@ It appears that simply calling realloc() before one\_gadget does not nudge stack
 ## Appendix
 1. [scanf() source code](https://code.woboq.org/userspace/glibc/stdio-common/scanf.c.html)
 2. [vfscanf() source code](https://code.woboq.org/userspace/glibc/stdio-common/vfscanf-internal.c.html)
-3. [scratch\_buffer\ struct source code](https://code.woboq.org/userspace/glibc/include/scratch\_buffer.h.html)
+3. [scratch\_buffer struct source code](https://code.woboq.org/userspace/glibc/include/scratch\_buffer.h.html)
 4. [scratch\_buffer\_grow\_preserve() source code](https://code.woboq.org/userspace/glibc/include/scratch\_buffer.h.html)
 5. [IO\_getc\_unlocked() source code](http://code.skysider.top:2227/public\_html/glibc/glibc/libio/bits/libio.h.html)
 6. [\_\_uflow() source code](https://code.woboq.org/userspace/glibc/libio/genops.c.html)
-7. [\_IO\_default\_uflow source code](https://code.woboq.org/userspace/glibc/libio/genops.c.html)
+7. [\_IO\_default\_uflow() source code](https://code.woboq.org/userspace/glibc/libio/genops.c.html)
 
 
 **scanf**
