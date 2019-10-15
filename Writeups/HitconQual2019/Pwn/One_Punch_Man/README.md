@@ -1,5 +1,20 @@
 # One Punch Man
 
+## Index
+*   [Index](#index)
+
+*   [Problem Overcap](#problem-overcap)
+
+*   [Exploit](#exploit)
+    *   [Vulnerability](#vulnerability)
+    *   [Challenges](#challenges)
+    *   [Address Leak](#leak-libc_base-and-heap_addr)
+    *   [Tcache Hijack](#create-overlapping-chunk-with-tcache)
+    *   [Full exploit](#putting-it-together)
+    *   [Seccomp](#deal-with-seccomp)
+    *   [Find Flag](#where-to-find-flag)
+
+
 ## Problem Overcap
 This is a classic menu pwn problem, the allowed operations(with pseudo code describing what it does) is listed below
 
@@ -94,7 +109,7 @@ Now lets see how we tackle those difficulties
 This part is relatively easy, since we have a use\_after\_free, and the programs allows showing data on heap, we can repeatedly creating chunks and freeing them, since those chunks are created with calloc, the tcache will be flooded, and we will eventually get a chunk that falls in unsorted\_bin. Showing those chunks leak the tcache linked list (where we can obtain heap\_address) and unsorted\_bin address..
 
 
-### Creating overlap chunk with tcache
+### Create overlapping chunk with tcache
 Since an arbitrary malloc is necessary(even for just hijacking hooks), we must somehow find a way to edit the tcache struct at front of heap. The most straightforward way to do this is to manage to calloc a chunk onto tcache, but since calloc only mallocs from normal bins, we must first create a free chunk on tcache, and have it's field set to acceptable value, but how is that even possible?  
 
 Lets first lay out the tcache structure as below  
@@ -251,3 +266,6 @@ One last thing, with only open/read/write, how should I know where the flag is?
 The author is kind enough to make path to the program reasonable (/home/ctf/flag), but I was too dumb to guess it. One thing I know is that conventionally, flags are placed in files named 'flag' or 'flag.txt', and usually resides in either root dir or in the same dir as program.
 
 So I decided to read /proc/self/maps to leak the path to executable, and finally got the flag
+
+
+[Top](#one-punch-man)
