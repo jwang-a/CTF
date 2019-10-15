@@ -56,7 +56,7 @@ free(chunk_list[idx])
 continue
 ```
 
-50056. serious_punch (create with malloc)
+6. serious_punch (create with malloc)
 ```
 if tcache->counts[size2idx(0x217)]<7:
 	exit()
@@ -64,7 +64,7 @@ if tcache->counts[size2idx(0x217)]<7:
 special = malloc(0x217)
 read(special,0x217)
 puts(special)
-``
+```
 
 additionally, the program uses glibc2.29, and applies seccomp which allow only the syscalls listed below  
 open, read, write, brk, mmap, mprotect, sigreturn, exit, exitgroup
