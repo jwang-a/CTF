@@ -8,7 +8,7 @@ Let's have a look at the allowed operations, below is a list organized by my tea
 ```
 Index here is relative to stack_top
 
-🈳 1 : nop
+🈳  1 : nop
 ➕  2: stack[-2] += stack[-1]; pop;
 ➖  3: stack[-2] = stack[-1] - stack[-2]; pop;
 ❌  4: stack[-2] *= stack[-1]; pop;
@@ -18,7 +18,7 @@ Index here is relative to stack_top
 💀  8: stack[-2] = stack[-1] < stack[-2]; pop
 💯  9: stack[-2] = stack[-1] == stack[-2]; pop
 🚀  10: jump stack[-1]; pop;
-🈶 1 1: jump stack[-1]; if (stack[-2] != 0); pop twice;
+🈶  11: jump stack[-1]; if (stack[-2] != 0); pop twice;
 🈚  12: jump stack[-1]; if (stack[-2] == 0); pop twice;
 ⏬  13: push operand;
 🔝  14: pop if stack not empty;
@@ -92,7 +92,7 @@ Since we can alter heap pointers, let's see what can be done to leak address.
 To leak libc\_base, the most intuitive way is to free a unsorted\_bin\_chunk and leak the pointer, and in libc2.27, this means freeing a chunk of large\_bin size. But actually, due to the indirect reference through meta chunk, leaking the pointer directly would be a little bit harder than dereferencing it and using it to leak pointers in main_arena  
 
 The procedure would be something as below
-1. S0 = create(0x500)<pre>	# target chunk</pre>
+1. S0 = create(0x500)<code>	# target chunk</code>
 2. (create(0x10))*9		# pad up storage index
 3. delete(S0)
 4. delete(S9)
