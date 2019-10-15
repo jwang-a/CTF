@@ -1,23 +1,23 @@
 # Crypto in the Shell
 
 ## Index
-[Index](#index)
+*   [Index](#index)
 
-[Problem Overcap](#problem-overcap)
+*   [Problem Overcap](#problem-overcap)
 
-[Exploit](#exploit)
-        * [Vulnerability](#vulnerability)
-        * [Control Key](#control-key)
-        * [Address Leak](#leak-code_base-libc_base-and-stack_addr)
-        * [Hijack flow](#bypass-encryption-rounds-limitation--hijack-flow)
-        * [Handle Timeout](#handle-timeout) 
+*   [Exploit](#exploit)
+    *   [Vulnerability](#vulnerability)
+    *   [Control Key](#control-key)
+    *   [Address Leak](#leak-code_base-libc_base-and-stack_addr)
+    *   [Hijack flow](#bypass-encryption-rounds-limitation--hijack-flow)
+    *   [Handle Timeout](#handle-timeout) 
 
 ## Problem Overcap
 The program provides a simple AES-CBC encrypt service, with the specification as below
 1. padding is done by simply modifying plaintext length to multiples of 0x10
-2. no user plaintext is taken, user can only provide offset to *buffer* and length
+2. no user plaintext is taken, user can only provide offset to **buffer** and length
 3. encryption is done inplace, and ciphertext will be printed
-4. *key* is initialized from a 'key\_file', *iv* is initialized to 0, *buffer* is initialized to 0, all three located in .bss section
+4. **key** is initialized from a key\_file, **iv** is initialized to 0, **buffer** is initialized to 0, all three located in .bss section
 5. there is a integer counter in main function stack, when reaching 32, main returns
 
 all protections are enabled
@@ -26,14 +26,14 @@ all protections are enabled
 
 ### Vulnerability
 There is only one vulnerability in this program  
-The program takes an offset to the *bufer*, and uses it to find where to encrypt, however, no check is performed on the offset, leading to possibility of out of bound access
+The program takes an offset to the **buffer**, and uses it to find where to encrypt, however, no check is performed on the offset, leading to possibility of out of bound access
 Moreover, offset is a 64 bit value, meaning we can access anywhere inside as long as the code\_base and target\_address is known  
 The only limitation is that since encryption is done inplace, only writeable sections are accessible  
 
 ### Control Key
 Since it a legimate AES-CBC encryption, the first step to be able to interpret encrypted data is to leak key and iv
 
-iv is known to be 0, so the only thing left it to leak key. The way to achieve this is to set offset to point to *&key* on bss, the program then encypts the key in place and outputs it. Though we still have no idea what the *original\_key* is, the program will use the encrypted *key* as future key from now on.
+iv is known to be 0, so the only thing left it to leak key. The way to achieve this is to set offset to point to **&key** on bss, the program then encypts the key in place and outputs it. Though we still have no idea what the **original\_key** is, the program will use the encrypted **key** as future key from now on.
 
 ### Leak code\_base, libc\_base and stack\_addr
 The next step is to leak code\_base and libc\_base and stack\_addr so we can leverage encryption mechanism to modify stack content and control flow
