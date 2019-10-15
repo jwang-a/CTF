@@ -8,8 +8,8 @@
 [Exploit](#exploit)
 	* [Vulnerability](#vulnerability)
 	* [Control Key](#control-key)
-	* [Address Leak](#leak-codebase-libcbase-and-stackaddr)
-	* [Hijack flow](#bypass-encryption-rounds-limitation-hijack-flow)
+	* [Address Leak](#leak-code_base-libc_base-and-stack_addr)
+	* [Hijack flow](#bypass-encryption-rounds-limitation--hijack-flow)
 	* [Handle Timeout](#handle-timeout) 
 
 ## Problem Overcap
