@@ -15,7 +15,7 @@
 ## Problem Overcap
 
 VM Pwn!!!  
-Let's have a look at the allowed operations, below is a list organized by my teammate Ting
+Let's have a look at the allowed operations, below is a list organized by my teammate Nkhg
 
 ```
 Index here is relative to stack_top
