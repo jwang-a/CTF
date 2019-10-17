@@ -24,4 +24,6 @@ Will gradually update the writeups here
 
 ### Solved after game
 
+[Lazyhouse](https://github.com/jwang-a/CTF/tree/master/Writeups/HitconQual2019/Pwn/Lazyhouse)
+
 ### External Writeup
