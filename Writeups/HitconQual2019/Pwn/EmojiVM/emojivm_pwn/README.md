@@ -203,7 +203,7 @@ tcache entry 0 -> S0_meta_data -> S0_data -> S1_meta_data -> free_hook-0x8
 ```
 
 ### Writing the payload in EmojiLang
-As writing in emoji is confusing and troublesome, I wrote a simple assembler(something similar to asm() func provided by pwntools) to transform readable assembly to EmojiLang, this dramatically increases production speed.  
+As writing in emoji is confusing and troublesome, I wrote a simple assembler(something similar to asm() func provided by pwntools) to transform readable assembly to EmojiLang, this drastically increases production speed.  
 
 And as one can easily see, there are a few invalid operation(such as push 0x68) in the instructions above. Making the assembler able to parse those instructions is a harass, so I manually expanded them into valid arthimetic instructions that provide the wanted result
 
