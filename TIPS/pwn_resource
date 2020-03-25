@@ -48,3 +48,4 @@ Settings
 
 Some random tips
 	any operation on func_address(ex. printf("%p\n",&func), void *a=&printf+1) forces func to become full relro(regardless of compile option)
+	gcc -m32 and i386 are different! Though they may seem identical in some cases, but are not necessarily the same, for instance, if you look at the malloc behaviour, you will notice that while running on x64 machines, -m32 maintains a 0x8 bytes aligned heap, while i386 uses a 0x10 bytes aligned one.
