@@ -9,6 +9,7 @@
 
 #define ArchField offsetof(struct seccomp_data, arch)
 #define SyscallNum offsetof(struct seccomp_data, nr)
+#define SyscallArg(x) offsetof(struct seccomp_data, args[x])
 
 #define Allow(syscall) \
   BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_##syscall, 0, 1),\
