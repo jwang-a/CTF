@@ -119,26 +119,7 @@ def convergents_from_contfrac(contfrac: Iterable[int]) -> Iterator[Tuple[int, in
             yield n, d
         n_, d_ = n, d
 
-
-def attack(e: int, n: int) -> Optional[int]:
-    """
-    ref: https://www.cits.ruhr-uni-bochum.de/imperia/md/content/may/krypto2ss08/shortsecretexponents.pdf Section.4
-    ref: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Br1.pdf
-    modified to return (d,p,q)
-    """
-    d = None
-    f_ = rational_to_contfrac(e, n)
-    for k, dg in convergents_from_contfrac(f_):
-        edg = e * dg
-        phi = edg // k
-
-        x = n - phi + 1
-        if x % 2 == 0 and is_perfect_square((x // 2) ** 2 - n):
-            g = edg - phi * k
-            d = dg // g
-            break
-    if d is None:
-        return None
+def extract_pq_from_edn(e,d,n):
     k = d*e-1
     t=0
     r=k
@@ -146,7 +127,7 @@ def attack(e: int, n: int) -> Optional[int]:
         r//=2
         t+=1
         if t==0:
-            return (D,None,None)
+            return None,None
     for i in range(100):
         FIN=0
         g = random.randint(0,n-1)
@@ -171,5 +152,27 @@ def attack(e: int, n: int) -> Optional[int]:
             break
     p = GCD(y-1,n)
     q = n//p
-    return (d,p,q)
+    return p,q
+
+def wiener_attack(e: int, n: int) -> Optional[int]:
+    """
+    ref: https://www.cits.ruhr-uni-bochum.de/imperia/md/content/may/krypto2ss08/shortsecretexponents.pdf Section.4
+    ref: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Br1.pdf
+    modified to return (d,p,q)
+    """
+    d = None
+    f_ = rational_to_contfrac(e, n)
+    for k, dg in convergents_from_contfrac(f_):
+        edg = e * dg
+        phi = edg // k
+
+        x = n - phi + 1
+        if x % 2 == 0 and is_perfect_square((x // 2) ** 2 - n):
+            g = edg - phi * k
+            d = dg // g
+            break
+    if d is None:
+        return None
+    p,q = extract_pq_from_edn(e,d,n)
+    return d,p,q
 
