@@ -1,0 +1,21 @@
+Title :
+	Variable Machine Revenge
+
+Category :
+	Pwn
+
+Desc :
+	Variable machine was slayed.
+	Now Variable Machine Beta is ready to avenge its death.
+
+Credits :
+	This challenge is modified from c2w2m2's Variable Machine in Defenit CTF
+	To give a headboost to those who haven't played Defenit CTF, here is the official writeup by c2w2m2 for his/her challenge : https://www.notion.so/Defenit-CTF-2020-ade355603bd94acdbe8ced623d17ce6c
+
+Hint :
+	It's a malloc...
+	It's a free...
+	It's an orphan in my inventory!
+
+Estimated Difficulty :
+	7/10

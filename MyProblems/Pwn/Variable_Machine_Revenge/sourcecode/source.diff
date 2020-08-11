@@ -1,0 +1,70 @@
+Only in ./: DF
+diff -ur ./src/Makefile ./NEW/src/Makefile
+--- ./src/Makefile
++++ ./NEW/src/Makefile
+@@ -1,10 +1,10 @@
+ CC=clang
+ OBJS=vm.o gc.o main.o
+-TARGET=main
++TARGET=variable_machine_revenge
+ CFLAGS=-std=c99 -fPIC
+
+
+ all: $(TARGET) 
+ 
+ $(TARGET): $(OBJS)
+-	$(CC) -o $@ $(OBJS) -pie -lpthread
+\ No newline at end of file
++	$(CC) -o $@ $(OBJS) -fpie -fstack-protector-all -Wl,-z,now -lpthread
+\ No newline at end of file
+diff -ur ./src/gc.c ./NEW/src/gc.c
+--- ./src/gc.c
++++ ./NEW/src/gc.c
+@@ -6,8 +6,6 @@
+ #include "../includes/gc.h"
+ #include "../includes/vm.h"
+ 
+-extern void usleep( unsigned long useconds);
+-
+ garbage *getHead(void *ptr){
+     garbage *current = NULL; 
+     current = head;
+diff -ur ./src/vm.c ./NEW/src/vm.c
+--- ./src/vm.c
++++ ./NEW/src/vm.c
+@@ -155,7 +155,7 @@
+ 
+     if(strcmp(globalVar[idx1]->type, "INT") || strcmp(globalVar[idx2]->type, "INT")) return 0;
+ 
+-    size_t tmp;
++    size_t tmp = 0;
+ 
+     if(operater == 1) tmp = globalVar[idx1]->value.iValue + globalVar[idx2]->value.iValue;
+     else if(operater == 2) tmp = globalVar[idx1]->value.iValue - globalVar[idx2]->value.iValue;
+@@ -181,13 +181,13 @@
+         char tmp1 = globalVar[idx1]->value.cValue;
+         char tmp2 = globalVar[idx2]->value.cValue;
+ 
+-        char tmp[3];
+-        snprintf(tmp, sizeof(tmp), "%c%c", tmp1, tmp2);
+-
+         globalVar[idx1]->type = "STRING";
+         globalVar[idx1]->value.sValue = (SVALUE *)gcCalloc(1, sizeof(SVALUE));
++        char *tmp = (char *)gcCalloc(3, 1);
++        snprintf(tmp, 3, "%c%c", tmp1, tmp2);
+         globalVar[idx1]->value.sValue->size = strlen(tmp);
+-        globalVar[idx1]->value.sValue->value = (char *)strdup(tmp);
++        globalVar[idx1]->value.sValue->value = tmp;
++
+     } else if (type == 2){
+         #ifdef DEBUG
+             printf("Type1 : %s\n", globalVar[idx1]->type);
+@@ -199,7 +199,7 @@
+         SVALUE *tmp2 = globalVar[idx2]->value.sValue;
+ 
+         char *tmp = (char *)gcCalloc(tmp1->size + tmp2->size + 1, 1);
+-        snprintf(tmp, tmp1->size + tmp2->size + 1, "%s%s", tmp1->value, tmp2->value);
++        snprintf(tmp,(int)(tmp1->size + tmp2->size + 1), "%s%s", tmp1->value, tmp2->value);
+         gcFree(globalVar[idx1]->value.sValue->value);
+         globalVar[idx1]->value.sValue->size = strlen(tmp);
+         globalVar[idx1]->value.sValue->value = tmp;

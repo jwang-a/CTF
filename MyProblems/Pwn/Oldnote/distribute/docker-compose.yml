@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  oldnote:
+    build: ./
+    volumes:
+      - ./share:/home/Oldnote:ro
+      - ./xinetd:/etc/xinetd.d/oldnote:ro
+    ports:
+      - "10102:10101"
+    expose:
+      - "10101"

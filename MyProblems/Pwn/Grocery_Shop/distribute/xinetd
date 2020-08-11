@@ -1,0 +1,13 @@
+service grocery_shop
+{
+	    disable = no
+		type = UNLISTED
+		wait = no
+		server = /home/Groceryshop/run.sh
+		socket_type = stream
+		protocol = tcp
+		user = Groceryshop
+		port = 10101
+		flags = REUSE
+}
+

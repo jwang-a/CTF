@@ -1,0 +1,13 @@
+service cute_baby_cats
+{
+	    disable = no
+		type = UNLISTED
+		wait = no
+		server = /home/CuteBabyCats/run.sh
+		socket_type = stream
+		protocol = tcp
+		user = CuteBabyCats
+		port = 10101
+		flags = REUSE
+}
+

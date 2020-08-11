@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  vmrevenge:
+    build: ./
+    volumes:
+      - ./share:/home/VMRevenge:ro
+      - ./xinetd:/etc/xinetd.d/variable_machine_revenge:ro
+    ports:
+      - "10105:10101"
+    expose:
+      - "10101"

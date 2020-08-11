@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  cute_baby_cats:
+    build: ./
+    volumes:
+      - ./share:/home/CuteBabyCats:ro
+      - ./xinetd:/etc/xinetd.d/cute_baby_cats:ro
+    ports:
+      - "10106:10101"
+    expose:
+      - "10101"

@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  groceryshop:
+    build: ./
+    volumes:
+      - ./share:/home/Groceryshop:ro
+      - ./xinetd:/etc/xinetd.d/grocery_shop:ro
+    ports:
+      - "10103:10101"
+    expose:
+      - "10101"

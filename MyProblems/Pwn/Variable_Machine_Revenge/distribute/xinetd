@@ -1,0 +1,13 @@
+service variable_machine_revenge
+{
+	    disable = no
+		type = UNLISTED
+		wait = no
+		server = /home/VMRevenge/run.sh
+		socket_type = stream
+		protocol = tcp
+		user = VMRevenge
+		port = 10101
+		flags = REUSE
+}
+
