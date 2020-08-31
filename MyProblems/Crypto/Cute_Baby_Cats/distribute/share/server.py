@@ -7,6 +7,14 @@ from userClass import User
 from myErrors import *
 import secret
 
+def myinput(prompt):
+    '''
+    python input prompts to stderr by default, and there is no option to change this afaik
+    this wrapper is just normal input with stdout prompt
+    '''
+    print(prompt,end='')
+    return input()
+
 def encrypt(m):
     aes = AES.new(secret.key,AES.MODE_CBC,secret.iv)
     return binascii.hexlify(secret.iv+aes.encrypt(pad(m.encode(),0x10))).decode()
@@ -21,8 +29,8 @@ def get_token():
 
 def create_user():
     try:
-        username =input('Username : ')
-        description = input('Description : ')
+        username =myinput('Username : ')
+        description = myinput('Description : ')
         if len(username)>=0x10:
             raise lengthError('Username length not in acceptable range')
         if len(description)>=0x10:
@@ -75,7 +83,7 @@ if __name__=='__main__':
     USER = None
     while True:
         menu()
-        choice = input('your choice : ').strip()
+        choice = myinput('your choice : ').strip()
         try:
             choice=int(choice)
         except:
@@ -85,7 +93,7 @@ if __name__=='__main__':
             if choice==1:
                 print(f'Here is your token : {get_token()}')
             elif choice==2:
-                ctoken = input('Please provide your login token (hex encoded) : ').strip()
+                ctoken = myinput('Please provide your login token (hex encoded) : ').strip()
                 login(ctoken)
             elif choice==3:
                 print('Goodbye')
