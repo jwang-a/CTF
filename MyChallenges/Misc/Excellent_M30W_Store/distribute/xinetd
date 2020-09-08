@@ -1,0 +1,13 @@
+service excellent_M30W_store
+{
+	    disable = no
+		type = UNLISTED
+		wait = no
+		server = /home/ExcellentM30WStore/run.sh
+		socket_type = stream
+		protocol = tcp
+		user = ExcellentM30WStore
+		port = 10101
+		flags = REUSE
+}
+

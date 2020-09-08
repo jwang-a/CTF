@@ -1,0 +1,12 @@
+service formatfree
+{
+	disable = no
+	type = UNLISTED
+	wait = no
+	server = /home/Formatfree/run.sh
+	socket_type = stream
+	protocol = tcp
+	user = Formatfree
+	port = 10101
+	flags = REUSE
+}

@@ -3,7 +3,7 @@
 ## Index
 *   [Index](#index)
 
-*   [Problem Overcap](#problem-overcap)
+*   [Problem Recap](#problem-recap)
 
 *   [Exploit](#exploit)
     *   [Vulnerability](#vulnerability)
@@ -12,7 +12,7 @@
     *   [Hijack flow](#bypass-encryption-rounds-limitation--hijack-flow)
     *   [Handle Timeout](#handle-timeout) 
 
-## Problem Overcap
+## Problem Recap
 The program provides a simple AES-CBC encrypt service, with the specification as below
 1. padding is done by simply modifying plaintext length to multiples of 0x10
 2. no user plaintext is taken, user can only provide offset to **buffer** and length

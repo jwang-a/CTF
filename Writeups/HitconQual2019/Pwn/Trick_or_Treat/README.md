@@ -3,7 +3,7 @@
 ## Index
 *   [Index](#index)
 
-*   [Problem Overcap](#problem-overcap)
+*   [Problem Recap](#problem-recap)
 
 *   [Exploit](#exploit)
     *   [Libc Leak](#libc-leak)
@@ -13,7 +13,7 @@
 
 *   [Appendix](#appendix)
 
-## Problem Overcap
+## Problem Recap
 The binary is rather simple. The basic program flow can be summarized as below
 
 ```

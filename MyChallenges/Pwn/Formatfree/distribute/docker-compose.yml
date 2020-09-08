@@ -1,0 +1,13 @@
+  
+version: '3'
+
+services:
+  formatfree:
+    build: ./
+    volumes:
+      - ./share:/home/Formatfree:ro
+      - ./xinetd:/etc/xinetd.d/formatfree:ro
+    ports:
+      - "10102:10101"
+    expose:
+      - "10101"

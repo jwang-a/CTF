@@ -3,12 +3,12 @@
 ## Index
 *   [Index](#index)
 
-*   [Problem Overcap](#problem-overcap)
+*   [Problem Recap](#problem-recap)
 
 *   [Solution](#solution)
 
 
-## Problem Overcap
+## Problem Recap
 This is a EmojiLang PPM challange!!  
 
 We are required to create an EmojiLang script that outputs the 9x9 multiplication table (exact output given in answer.txt)  

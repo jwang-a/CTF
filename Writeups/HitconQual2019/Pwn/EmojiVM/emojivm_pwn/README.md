@@ -3,7 +3,7 @@
 ## Index
 *   [Index](#index)
 
-*   [Problem Overcap](#problem-overcap)
+*   [Problem Recap](#problem-recap)
 
 *   [Exploit](#exploit)
     *   [Vulnerability](#vulnerability)
@@ -12,7 +12,7 @@
     *   [EmojiLang Wrapping](#writing-the-payload-in-emojilang)
 
 
-## Problem Overcap
+## Problem Recap
 
 VM Pwn!!!  
 Let's have a look at the allowed operations, below is a list organized by my teammate Nkhg

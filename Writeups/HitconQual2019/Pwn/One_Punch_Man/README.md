@@ -3,7 +3,7 @@
 ## Index
 *   [Index](#index)
 
-*   [Problem Overcap](#problem-overcap)
+*   [Problem Recap](#problem-recap)
 
 *   [Exploit](#exploit)
     *   [Vulnerability](#vulnerability)
@@ -15,7 +15,7 @@
     *   [Find Flag](#where-to-find-flag)
 
 
-## Problem Overcap
+## Problem Recap
 This is a classic menu pwn problem, the allowed operations(with pseudo code describing what it does) is listed below
 
 1. debut (create new chunk)

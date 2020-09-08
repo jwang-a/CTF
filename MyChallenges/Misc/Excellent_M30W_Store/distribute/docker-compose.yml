@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  excellent_m30w_store:
+    build: ./
+    volumes:
+      - ./share:/home/ExcellentM30WStore:ro
+      - ./xinetd:/etc/xinetd.d/ExcellentM30WStore:ro
+    ports:
+      - "10103:10101"
+    expose:
+      - "10101"
