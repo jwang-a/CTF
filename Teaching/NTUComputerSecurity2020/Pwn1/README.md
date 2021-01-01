@@ -6,7 +6,7 @@
 3. plt & GOT
 4. fsb
 
-## Slides
+## Slides (english)
 [Slide](https://github.com/jwang-a/CTF/tree/master/Teaching/NTUComputerSecurity2020/Pwn1/CS2020_Pwn1.key)
 
 ## Course Video Link (mandarin)
