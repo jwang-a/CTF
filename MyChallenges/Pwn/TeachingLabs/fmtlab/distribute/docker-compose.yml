@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  fmtlab:
+    build: ./
+    volumes:
+      - ./share:/home/fmtlab:ro
+      - ./xinetd:/etc/xinetd.d/fmtlab:ro
+    ports:
+      - "30104:10101"
+    expose:
+      - "10101"

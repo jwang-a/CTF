@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  shelllab:
+    build: ./
+    volumes:
+      - ./share:/home/shelllab:ro
+      - ./xinetd:/etc/xinetd.d/shelllab:ro
+    ports:
+      - "30101:10101"
+    expose:
+      - "10101"

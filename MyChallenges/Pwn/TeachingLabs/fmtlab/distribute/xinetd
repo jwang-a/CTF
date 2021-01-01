@@ -1,0 +1,12 @@
+service fmtlab
+{
+        disable = no
+        type = UNLISTED
+        wait = no
+        server = /home/fmtlab/run.sh
+        socket_type = stream
+        protocol = tcp
+        user = fmtlab
+        port = 10101
+        flags = REUSE
+}

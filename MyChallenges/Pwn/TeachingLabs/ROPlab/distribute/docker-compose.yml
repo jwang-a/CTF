@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  roplab:
+    build: ./
+    volumes:
+      - ./share:/home/ROPlab:ro
+      - ./xinetd:/etc/xinetd.d/roplab:ro
+    ports:
+      - "30102:10101"
+    expose:
+      - "10101"

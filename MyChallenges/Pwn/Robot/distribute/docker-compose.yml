@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  robot:
+    build: ./
+    volumes:
+      - ./share:/home/robot:ro
+      - ./xinetd:/etc/xinetd.d/robot:ro
+    ports:
+      - "30202:10101"
+    expose:
+      - "10101"

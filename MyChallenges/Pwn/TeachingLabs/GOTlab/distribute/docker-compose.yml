@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  gotlab:
+    build: ./
+    volumes:
+      - ./share:/home/GOTlab:ro
+      - ./xinetd:/etc/xinetd.d/gotlab:ro
+    ports:
+      - "30103:10101"
+    expose:
+      - "10101"

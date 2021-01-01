@@ -1,0 +1,12 @@
+service gotlab
+{
+        disable = no
+        type = UNLISTED
+        wait = no
+        server = /home/GOTlab/run.sh
+        socket_type = stream
+        protocol = tcp
+        user = GOTlab
+        port = 10101
+        flags = REUSE
+}
