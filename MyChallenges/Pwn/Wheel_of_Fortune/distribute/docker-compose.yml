@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  wof:
+    build: ./
+    volumes:
+      - ./share:/home/WOF:ro
+      - ./xinetd:/etc/xinetd.d/wof:ro
+    ports:
+      - "10102:10101"
+    expose:
+      - "10101"

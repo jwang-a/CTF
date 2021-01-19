@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  babyheap:
+    build: ./
+    volumes:
+      - ./share:/home/babyheap:ro
+      - ./xinetd:/etc/xinetd.d/babyheap:ro
+    ports:
+      - "10103:10101"
+    expose:
+      - "10101"

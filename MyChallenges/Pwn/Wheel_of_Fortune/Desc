@@ -1,0 +1,14 @@
+Title : 
+    Wheel of Fortune
+
+Category :
+    Pwn, Misc
+
+Desc : 
+    The wheel of fortune tells your fortune...
+
+Estimated Difficulty :
+    3/10
+
+Note :
+    Original version had a BOF in read_num, which is fixed here

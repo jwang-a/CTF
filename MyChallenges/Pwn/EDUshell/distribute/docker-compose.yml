@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  edushell:
+    build: ./
+    volumes:
+      - ./share:/home/EDUshell:ro
+      - ./xinetd:/etc/xinetd.d/edushell:ro
+    ports:
+      - "10101:10101"
+    expose:
+      - "10101"
