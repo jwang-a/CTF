@@ -1,0 +1,12 @@
+service babynote
+{
+        disable = no
+        type = UNLISTED
+        wait = no
+        server = /home/Babynote/run.sh
+        socket_type = stream
+        protocol = tcp
+        user = Babynote
+        port = 10101
+        flags = REUSE
+}

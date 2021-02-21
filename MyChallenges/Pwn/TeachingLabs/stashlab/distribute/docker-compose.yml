@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  stashlab:
+    build: ./
+    volumes:
+      - ./share:/home/stashlab:ro
+      - ./xinetd:/etc/xinetd.d/stashlab:ro
+    ports:
+      - "30107:10101"
+    expose:
+      - "10101"

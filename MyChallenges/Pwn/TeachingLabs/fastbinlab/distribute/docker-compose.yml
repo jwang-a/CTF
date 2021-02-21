@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  fastbinlab:
+    build: ./
+    volumes:
+      - ./share:/home/fastbinlab:ro
+      - ./xinetd:/etc/xinetd.d/fastbinlab:ro
+    ports:
+      - "30105:10101"
+    expose:
+      - "10101"

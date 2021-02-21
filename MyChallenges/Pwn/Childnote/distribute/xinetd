@@ -1,0 +1,12 @@
+service childnote
+{
+        disable = no
+        type = UNLISTED
+        wait = no
+        server = /home/Childnote/run.sh
+        socket_type = stream
+        protocol = tcp
+        user = Childnote
+        port = 10101
+        flags = REUSE
+}

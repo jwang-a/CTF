@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  babynote:
+    build: ./
+    volumes:
+      - ./share:/home/Babynote:ro
+      - ./xinetd:/etc/xinetd.d/babynote:ro
+    ports:
+      - "30203:10101"
+    expose:
+      - "10101"

@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  tcachelab:
+    build: ./
+    volumes:
+      - ./share:/home/tcachelab:ro
+      - ./xinetd:/etc/xinetd.d/tcachelab:ro
+    ports:
+      - "30106:10101"
+    expose:
+      - "10101"
