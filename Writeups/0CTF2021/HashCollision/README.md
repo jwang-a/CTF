@@ -7,7 +7,7 @@
 
 *   [Exploit](#exploit)
     *   [Utilize OOB](#utilize-oob)
-    *   [Hash Collision](#collideing-hash)
+    *   [Hash Collision](#colliding-hash)
     *   [Chaining it all (Painful Stuff)](#chaining-it-all)
 
 *   [Fun Fact](#fun-fact)
@@ -188,9 +188,10 @@ Kudos to ripples for such an amazing challenge, and no fret, I still had fun des
 
 1. The challenge was renamed at some point from "Hash Collsion" to "Collision". On retrospect, this change is intended to hint towards the collision of mmap address. But since I have already wrote exploit for that part, it was kind not at all helpful...
 2. After discussing with author after solving challenge, me mentioned directly overwriting \_\_free\_hook with a trampoline gadget is enough to get stack pivot. While I have the trampoline gadget included in exploit, it is not used anywhere... I wonder what kept me from writing \_\_free\_hook at time of exploit development
-3. The file exploit technique is used in one of my challenges for Balsn ctf last year, sadly no one solved it. The challenge will be republished in this year's Balsn ctf under homework category [^1], interested players are encouraged to spend time solving it before CTF starts
+3. The file exploit technique is used in one of my challenges for Balsn ctf last year, sadly no one solved it. The challenge will be republished in this year's Balsn ctf under homework category [1], interested players are encouraged to spend time solving it before CTF starts
 4. If you enjoy mmap related stuff, you'll probably enjoy playing my Balsn ctf challenge this year >.0
 
-[^1]: See our twitter for more information about the new homework category [link](https://twitter.com/balsnctf/status/1407656712778125319?s=20)
+## 
+[1] See our twitter for more information about the new homework category [link](https://twitter.com/balsnctf/status/1407656712778125319?s=20)
 
 [Top](#hash-collision)
