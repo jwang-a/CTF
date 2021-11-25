@@ -5,9 +5,11 @@ Unicorn Fullchain
 Guest Program -unicorn features-> Guest ACE -unicorn 0day-> Host ACE
 
 Solves
-  prelude : 12/284
-  interlude : 1/284
-  postlude : 0/284
+          | Solves |
+----------|:------:|
+prelude   | 12/284 |
+interlude | 1/284  |
+postlude  | 0/284  |
 
 0day is assigned CVE-2021-44078
 
