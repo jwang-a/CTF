@@ -1,9 +1,10 @@
 # Draupnir
 
 ganache-core 2.13.2 forked blockchain evm impl 0day 
+
 desync between storage and eth balance allows double spend and all kinds of mischieve
 
-Solves 0/284
+Solves : 0/284
 
 ## Inspiration
 
