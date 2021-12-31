@@ -8,7 +8,7 @@ Solves : 0/284
 
 ## Inspiration
 
-Early this year, I spent some day studying how evm works and found this bug.
+Early this year, I spent some time studying how evm works and found this bug.
 
 Similar to Unicorn's Aisle (another series of sanbox/pwn challenge presented in balsnctf this year), the bug is extremely easy to trigger and **should** be discoverable through some fuzzing/trial and error.
 
