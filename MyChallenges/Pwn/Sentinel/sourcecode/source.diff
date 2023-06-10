@@ -1,0 +1,36 @@
+27a28,29
+> #define __NR_uselib 134
+> 
+34a37
+> 
+99c102
+<                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,AUDIT_ARCH_X86_64,0,12),
+---
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,AUDIT_ARCH_X86_64,0,15),
+101,108c104,114
+<                                  BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K,0x40000000,10,0),
+<                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_kill,7,0),
+<                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_tkill,6,0),
+<                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_tgkill,5,0),
+<                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_open,4,0),
+<                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_openat,3,0),
+<                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_openat2,2,0),
+<                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_pidfd_open,1,0),
+---
+>                                  BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K,0x40000000,13,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_kill,10,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_tkill,9,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_tgkill,8,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_open,7,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_openat,6,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_openat2,5,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_pidfd_open,4,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_io_uring_setup,3,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_io_setup,2,0),
+>                                  BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K,__NR_uselib,1,0),
+442a449,451
+>       case __NR_io_uring_setup:
+>       case __NR_io_setup:
+>       case __NR_uselib:
+444d452
+<         //shouldn't reach here
