@@ -1,6 +1,8 @@
-# Unicorn's Aisle
+# ASTRAL
 
 Custom Applet Processor Fullchain
+
+Emulated Processor VM bytecode execution -> Emulated Processor -> Userspace program -> Kernel -> Hypervisor
 
 |             | Solves | Estimated Solves |
 | ----------- | ------ | ---------------- |
