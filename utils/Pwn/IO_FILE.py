@@ -69,6 +69,51 @@ class IO_FILE_plus(object):
         elif self.arch==64:
             return p32(flags)+p32(0)+p64(read_ptr)+p64(read_end)+p64(read_base)+p64(write_base)+p64(write_ptr)+p64(write_end)+p64(buf_base)+p64(buf_end)+p64(save_base)+p64(backup_base)+p64(save_end)+p64(markers)+p64(chain)+p32(fileno)+p32(flags2)+p64(old_offset)+p16(cur_column)+p8(vtable_offset)+p8(shortbuf)+p32(0)+p64(lock)+p64(offset)+p64(codecvt)+p64(wide_data)+p64(freeres_list)+p64(freeres_buf)+p64(pad5)+p32(mode)+unused2+p64(vtable)
 
+
+class IO_wide_data(object):
+    def __init__(self,arch=64):
+        '''
+        struct _IO_wide_data{
+            wchar_t *_IO_read_ptr;
+            wchar_t *_IO_read_end;
+            wchar_t *_IO_read_base;
+            wchar_t *_IO_write_base;
+            wchar_t *_IO_write_ptr;
+            wchar_t *_IO_write_end;
+            wchar_t *_IO_buf_base;
+            wchar_t *_IO_buf_end;
+            wchar_t *_IO_save_base;
+            wchar_t *_IO_backup_base;
+            wchar_t *_IO_save_end;
+            __mbstate_t _IO_state;
+            __mbstate_t _IO_last_state;
+            struct _IO_codecvt _codecvt;
+            wchar_t _shortbuf[1];
+            const struct _IO_jump_t *_wide_vtable;
+        };
+
+        struct _IO_codecvt{
+            void (*__codecvt_destr);
+            enum __codecvt_result (*__codecvt_do_out);
+            enum __codecvt_result (*__codecvt_do_unshift);
+            enum __codecvt_result (*__codecvt_do_in);
+            int (*__codecvt_do_encoding);
+            int (*__codecvt_do_always_noconv);
+            int (*__codecvt_do_length);
+            int (*__codecvt_do_max_length);
+            _IO_iconv_t __cd_in;
+            _IO_iconv_t __cd_out;
+        };
+        '''
+        self.arch = arch
+
+    def construct(self,read_ptr=0,read_end=0,read_base=0,write_base=0,write_ptr=0,write_end=0,buf_base=0,buf_end=0,save_base=0,backup_base=0,save_end=0,state=0,last_state=0,shortbuf=0,wide_vtable=0,codecvt_destr=0,codecvt_do_out=0,codecvt_do_unshift=0,codecvt_do_in=0,codecvt_do_encoding=0,codecvt_do_always_noconv=0,codecvt_do_length=0,codecvt_do_max_length=0,cd_in=0,cd_out=0):
+        if self.arch==32:
+            print('not implemented yet')
+            exit()
+        elif self.arch==64:
+            return p64(read_ptr)+p64(read_end)+p64(read_base)+p64(write_base)+p64(write_ptr)+p64(write_end)+p64(buf_base)+p64(buf_end)+p64(save_base)+p64(backup_base)+p64(save_end)+p64(state)+p64(last_state)+p64(codecvt_destr)+p64(codecvt_do_out)+p64(codecvt_do_unshift)+p64(codecvt_do_in)+p64(codecvt_do_encoding)+p64(codecvt_do_always_noconv)+p64(codecvt_do_length)+p64(codecvt_do_max_length)+b'\x00'*0x40+b'\x00'*0x40+p8(shortbuf)+b'\x00'*7+p64(wide_vtable)
+
 class IO_jump_t(object):
     def __init__(self,arch=64):
         '''
