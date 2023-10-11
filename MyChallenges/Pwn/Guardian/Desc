@@ -1,0 +1,12 @@
+Title :
+    Guardian
+
+Category :
+    Pwn, Sandbox
+
+Desc :
+    Too much freedom with syscall sentinel last year...
+    So we hired a new guardian to watch your library usages!
+
+Estimated Difficulty :
+    7/10
