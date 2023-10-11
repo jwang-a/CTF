@@ -1,3 +1,7 @@
+'''
+This file is used to generate applet signatures and not provided to players
+'''
+
 from pwn import *
 import hashlib
 from Crypto.Signature import pkcs1_15
