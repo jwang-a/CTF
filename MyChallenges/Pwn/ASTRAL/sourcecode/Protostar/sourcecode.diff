@@ -1,0 +1,3 @@
+diff -r StarryNight/APPLET_PROCESSOR/processor.c Protostar/APPLET_PROCESSOR/processor.c
+15a16
+>   return SUCCESS;
