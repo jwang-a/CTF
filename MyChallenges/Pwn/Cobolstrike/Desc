@@ -1,0 +1,13 @@
+Title :
+    Cobolstrike
+
+Category :
+    Pwn
+
+Desc :
+    Cobol strikes back
+
+    NOTE: Modified from PlaidCTF 2021 "The Cobol Job" (https://ctftime.org/task/15642). The solution is completely different, so don't worry if you haven't looked at the original challenge. Feel free to diff the source code if you find it helpful.
+
+Estimated Difficulty :
+    4/10

@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  cobolstrike:
+    build: .
+    volumes:
+      - ./share:/home/Cobolstrike:ro
+      - ./xinetd:/etc/xinetd.d/cobolstrike:ro
+    ports:
+      - "10101:10101"
+    expose:
+      - "10101"
+    restart: always
